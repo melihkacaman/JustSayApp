@@ -1,2 +1,4 @@
+include ':entity'
+include ':serverapp'
 include ':app'
 rootProject.name = "JustSayClient"
