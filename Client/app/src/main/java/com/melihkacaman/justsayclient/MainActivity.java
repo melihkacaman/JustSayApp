@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (client != null && txtUserName.getText().length() > 0){
             boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
-            if (res)
-                System.out.println("basarili");
+            if (res){
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra("username", txtUserName.getText().toString());
+                startActivity(intent);
+            }
             else
                 Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
         }

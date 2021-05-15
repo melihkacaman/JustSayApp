@@ -6,47 +6,67 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="411dp"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteY="8dp">
+    <TextView
+        android:id="@+id/txt_chat_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="341dp"
+        android:text="Melih"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/space"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_chat_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="Melih"
-            android:textSize="22sp" />
+    <Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txt_chat_username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:background="@color/purple_500"
-            android:onClick="btnLeaveClick"
-            android:text="Leave" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/purple_500"
+        android:elevation="40dp"
+        android:onClick="btnLeaveClick"
+        android:text="Leave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/purple_700"
         android:text="Actions"
         android:textColor="@color/white"
         app:icon="@drawable/action_foreground"
         app:iconTint="@color/white"
-        tools:layout_editor_absoluteX="307dp"
-        tools:layout_editor_absoluteY="667dp" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.973" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/person_float"
@@ -58,7 +78,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/add_fab"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/action_foreground" />
+        app:srcCompat="@drawable/person_foreground" />
 
     <TextView
         android:id="@+id/txt_person"
@@ -82,7 +102,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/person_float"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/action_foreground" />
+        app:srcCompat="@drawable/room_foreground" />
 
 
     <TextView
@@ -107,7 +127,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/room_float"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/action_foreground" />
+        app:srcCompat="@drawable/existing_foreground" />
 
     <TextView
         android:id="@+id/txt_join"

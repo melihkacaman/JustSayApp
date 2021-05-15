@@ -12,16 +12,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ChatActivity extends AppCompatActivity {
 
-    FloatingActionButton btnWithPerson, btnInRoom, btnJoinRoom;
-    ExtendedFloatingActionButton menu;
-    TextView txtWithPerson, txtInRoom, txtJoinRoom;
+    private FloatingActionButton btnWithPerson, btnInRoom, btnJoinRoom;
+    private ExtendedFloatingActionButton menu;
+    private TextView txtWithPerson, txtInRoom, txtJoinRoom;
 
-    boolean isAllFabsVisible;
+    private TextView txtUsername;
+
+    private boolean isAllFabsVisible;
+
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Bundle bundle = getIntent().getExtras();
+        userName = bundle.getString("username");
 
         menu = findViewById(R.id.add_fab);
 
@@ -32,6 +39,9 @@ public class ChatActivity extends AppCompatActivity {
         txtWithPerson = findViewById(R.id.txt_person);
         txtInRoom = findViewById(R.id.txt_room);
         txtJoinRoom = findViewById(R.id.txt_join);
+
+        txtUsername = findViewById(R.id.txt_chat_username);
+        txtUsername.setText(userName);
 
         setVisibleFabs(View.GONE);
         isAllFabsVisible = false;
