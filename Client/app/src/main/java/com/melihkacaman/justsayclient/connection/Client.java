@@ -1,5 +1,7 @@
 package com.melihkacaman.justsayclient.connection;
 
+import android.os.AsyncTask;
+
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
@@ -55,10 +57,25 @@ public class Client {
         return result.get();
     }
 
-    public static Client getInstance() throws IOException {
+    public static Client getInstance() {
         if (client == null)
-            client = new Client("127.0.0.1", 6000);
+        {
+            new Thread(() -> {
+
+                do {
+                    try {
+                        client = new Client("192.168.1.246", 5000);
+                        Thread.sleep(1000);
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } while (client == null);
+                System.out.println("baglandiii :) ");
+            }).start();
+        }
 
         return client;
     }
+
+
 }

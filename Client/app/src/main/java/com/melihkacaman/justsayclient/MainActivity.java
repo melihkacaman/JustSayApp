@@ -1,7 +1,14 @@
 package com.melihkacaman.justsayclient;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Client client;
 
+    private int INTERNET_PERMISSION_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,23 +36,58 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         txtUserName = findViewById(R.id.txt_username);
 
-        try {
-            client = Client.getInstance();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("[MainActivity.java] Connetcion Failure");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_DENIED){
+            requestInternetPermission();
+        }
+
+        client = Client.getInstance();
+        if (client == null){
             Toast.makeText(getApplicationContext(),"Please, check your internet connection!",Toast.LENGTH_LONG).show();
         }
     }
 
     public void btnLoginClick(View view){
-        if (!txtUserName.getText().equals("")){
-            boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
-            if (res)
-                System.out.println("basarili");
-            else
-                System.out.println("basarisiz");
+        if (client == null) {
+            client = Client.getInstance();
+            Toast.makeText(getApplicationContext(),"Please, check your internet connection!",Toast.LENGTH_LONG).show();
+        }else {
+            if (txtUserName.getText().length() > 0){
+                boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
+                if (res)
+                    System.out.println("basarili");
+                else
+                    Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
+            }
         }
-        Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
+    }
+
+    private void requestInternetPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed because of Internet connection.")
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}
+                        ,INTERNET_PERMISSION_CODE);
+                    })
+                    .setNegativeButton("CANCEL", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .create().show();
+        }else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}
+                    ,INTERNET_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == INTERNET_PERMISSION_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
