@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,17 +48,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btnLoginClick(View view){
-        if (client == null) {
-            client = Client.getInstance();
+        client = Client.getInstance();
+        if (client == null)
             Toast.makeText(getApplicationContext(),"Please, check your internet connection!",Toast.LENGTH_LONG).show();
-        }else {
-            if (txtUserName.getText().length() > 0){
-                boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
-                if (res)
-                    System.out.println("basarili");
-                else
-                    Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
-            }
+
+        if (client != null && txtUserName.getText().length() > 0){
+            boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
+            if (res)
+                System.out.println("basarili");
+            else
+                Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
         }
     }
 

@@ -52,6 +52,7 @@ public class SClient implements Runnable, OpClient {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }

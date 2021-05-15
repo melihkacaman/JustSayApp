@@ -41,7 +41,7 @@ public class ServerManager implements OpServer {
         SClient user = null;
 
         for (SClient sClient : users) {
-            if (sClient.getUserName().equals(userName)){
+            if (sClient.getUserName() != null && sClient.getUserName().equals(userName)){
                 user = sClient;
             }
         }

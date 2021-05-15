@@ -1,6 +1,8 @@
 package com.melihkacaman.entity;
 
-public class Message<T> {
+import java.io.Serializable;
+
+public class Message<T> implements Serializable {
     public T targetObj;
     public OperationType operationType;
 

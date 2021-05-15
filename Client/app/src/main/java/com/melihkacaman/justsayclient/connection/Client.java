@@ -31,28 +31,31 @@ public class Client {
     }
 
     public void sendObject(Object object){
-        try {
-            output.writeObject(object);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new ForwardServer(object).start();
     }
 
-    public boolean checkUserNameForConvenience(String username){
+    public boolean checkUserNameForConvenience(String username) {
         AtomicBoolean result = new AtomicBoolean(false);
         Message<String> message = new Message<>(username, OperationType.CHECKUSERNAME);
         sendObject(message);
 
-        new Thread(() -> {
-            // TODO: 14.05.2021 | might be necessary while.
+        Thread thread = new Thread(() -> {
+            Object ackType = null;
             try {
-                Object ackType = input.readObject();
+                ackType = input.readObject();
                 if (ackType == ACKType.SUCCESS)
                     result.set(true);
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
+
         });
+        thread.start();
+        try {
+            thread.join();   // Todo : This locks main threads, change it with loading
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return result.get();
     }
@@ -70,12 +73,25 @@ public class Client {
                         e.printStackTrace();
                     }
                 } while (client == null);
-                System.out.println("baglandiii :) ");
             }).start();
         }
 
         return client;
     }
 
+    private class ForwardServer extends Thread {
+        Object message;
+        ForwardServer(Object message) {
+            this.message = message;
+        }
 
+        @Override
+        public void run() {
+            try {
+                output.writeObject(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
