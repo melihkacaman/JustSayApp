@@ -2,6 +2,7 @@ package com.melihkacaman.justsayclient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         btnWithPerson.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(),"with person",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(),CreateChatActivity.class));
         });
 
         btnInRoom.setOnClickListener(v -> {

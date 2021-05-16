@@ -4,6 +4,7 @@ package com.melihkacaman.serverapp.server;
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
+import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpClient;
 import com.melihkacaman.serverapp.businnes.ServerManager;
 
@@ -48,6 +49,12 @@ public class SClient implements Runnable, OpClient {
                                 ACK(ACKType.FAILURE);
                             }
                             break;
+                        case SENDUSERNAMES:
+                            User[] userNames = serverManager.getUsers();
+                            Message<User[]> result = new Message<>(userNames, OperationType.SENDUSERNAMES);
+                            cOutput.writeObject(result);
+                            // Todo: you migth use the readObj again to check ack from client.
+                            break;
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
@@ -69,6 +76,10 @@ public class SClient implements Runnable, OpClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUserName() {

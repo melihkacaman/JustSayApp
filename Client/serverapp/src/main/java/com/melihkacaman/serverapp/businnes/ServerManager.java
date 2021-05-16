@@ -1,6 +1,7 @@
 package com.melihkacaman.serverapp.businnes;
 
 
+import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpServer;
 import com.melihkacaman.serverapp.server.SClient;
 
@@ -47,6 +48,17 @@ public class ServerManager implements OpServer {
         }
 
         return user;
+    }
+
+    public User[] getUsers(){
+        User[] result = new User[users.size()];
+        int k = 0;
+        for (SClient sClient : users) {
+            result[k] = new User(sClient.getUserName(), sClient.getId());
+            k++;
+        }
+
+        return result;
     }
 
     public static ServerManager getInstance(){

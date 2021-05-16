@@ -37,11 +37,13 @@ public class Server {
             while (!Server.this.socket.isClosed()){
                 System.out.println("[Server.java] Accepting state");
                 try {
-                    Socket nClient = Server.this.socket.accept();
-                    SClient sClient = new SClient(serverManager.getCount(), nClient);
-                    new Thread(sClient).start();
-                    serverManager.addUser(sClient);
-                    serverManager.increaseCount();
+                    synchronized (this){  // this might be error dont forget
+                        Socket nClient = Server.this.socket.accept();
+                        SClient sClient = new SClient(serverManager.getCount(), nClient);
+                        new Thread(sClient).start();
+                        serverManager.addUser(sClient);
+                        serverManager.increaseCount();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
