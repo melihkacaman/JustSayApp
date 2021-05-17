@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.connection.Client;
+import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.UserListener;
 
 public class CreateChatActivity extends AppCompatActivity {
@@ -32,23 +33,28 @@ public class CreateChatActivity extends AppCompatActivity {
 
         client.sendRequestForUserList();
 
+        // first loading
         client.addListener(new UserListener() {
             @Override
             public void getUsersInfo(User[] users) {
                 handler.post(() -> {
-                    String[] names = new String[users.length];
-                    int i = 0;
-                    for (User user : users){
-                        names[i] = user.getUserName();
-                        i++;
-                    }
+                    if (users.length > 1){
+                        String[] names = new String[users.length];
+                        int i = 0;
+                        for (User user : users){
+                            if (user.getId() != ClientInfo.me.getId()){
+                                names[i] = user.getUserName();
+                                i++;
+                            }
+                        }
 
-                    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateChatActivity.this,
-                            android.R.layout.simple_list_item_1, android.R.id.text1,names);
-                    usersList.setAdapter(adapter);
+
+                        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateChatActivity.this,
+                                android.R.layout.simple_list_item_1, android.R.id.text1,names);
+                        usersList.setAdapter(adapter);
+                    }
                 });
             }
         });
-
     }
 }

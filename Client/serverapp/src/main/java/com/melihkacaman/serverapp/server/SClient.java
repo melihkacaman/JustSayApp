@@ -44,7 +44,8 @@ public class SClient implements Runnable, OpClient {
                         case CHECKUSERNAME:
                             if (serverManager.checkUserNameForConvenience(((Message) message).targetObj.toString())){
                                 userName = ((Message) message).targetObj.toString();
-                                ACK(ACKType.SUCCESS);
+                                //ACK(ACKType.SUCCESS);
+                                cOutput.writeObject(new User(userName, id));
                             }else {
                                 ACK(ACKType.FAILURE);
                             }

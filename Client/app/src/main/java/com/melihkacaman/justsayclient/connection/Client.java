@@ -52,15 +52,18 @@ public class Client {
         sendObject(message);
 
         Thread thread = new Thread(() -> {
-            Object ackType = null;
+            Object ack = null;
             try {
-                ackType = input.readObject();
-                if (ackType == ACKType.SUCCESS)
+                ack = input.readObject();
+                if (ack instanceof User)
                 {
+                    ClientInfo.me = (User) ack;
                     result.set(true);
                     listenServer.start();
+                }else {
+                    throw new Exception("Client NACK!");
                 }
-            } catch (ClassNotFoundException | IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
