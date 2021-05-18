@@ -6,4 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".CreateRoomActivity">
 
+    <EditText
+        android:id="@+id/txt_room_topic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="104dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Topic"
+        app:layout_constraintBottom_toTopOf="@+id/btn_create_room"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_name" />
+
+    <EditText
+        android:id="@+id/txt_room_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="229dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="51dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Title"
+        app:layout_constraintBottom_toTopOf="@+id/txt_room_topic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_create_room"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="217dp"
+        android:backgroundTint="@color/purple_500"
+        android:text="CREATE"
+        android:onClick="createRoomClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_topic" />
 </androidx.constraintlayout.widget.ConstraintLayout>
