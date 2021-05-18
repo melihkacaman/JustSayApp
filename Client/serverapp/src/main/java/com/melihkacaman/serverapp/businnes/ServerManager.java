@@ -54,8 +54,10 @@ public class ServerManager implements OpServer {
         User[] result = new User[users.size()];
         int k = 0;
         for (SClient sClient : users) {
-            result[k] = new User(sClient.getUserName(), sClient.getId());
-            k++;
+            if (!sClient.getUserName().isEmpty()){
+                result[k] = new User(sClient.getUserName(), sClient.getId());
+                k++;
+            }
         }
 
         return result;
