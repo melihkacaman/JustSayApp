@@ -1,5 +1,6 @@
 package com.melihkacaman.justsayclient.connection;
 
+import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 
 public interface UserListener {

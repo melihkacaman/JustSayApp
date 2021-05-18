@@ -39,7 +39,7 @@ public class Server {
                 try {
                     synchronized (this){  // this might be error dont forget
                         Socket nClient = Server.this.socket.accept();
-                        SClient sClient = new SClient(serverManager.getCount(), nClient);
+                        SClient sClient = new SClient(serverManager.getUserCount(), nClient);
                         new Thread(sClient).start();
                         serverManager.addUser(sClient);
                         serverManager.increaseCount();

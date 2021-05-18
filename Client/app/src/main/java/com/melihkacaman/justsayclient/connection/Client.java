@@ -25,6 +25,7 @@ public class Client {
     private int serverPort;
 
     private Queue<UserListener> listenersOfUser;
+    private Queue<RoomListener> listenersOfRoom;
     private ListenServer listenServer;
 
     private static Client client = null;
@@ -39,6 +40,7 @@ public class Client {
         this.listenServer = new ListenServer();
 
         this.listenersOfUser = new LinkedList<>();
+        this.listenersOfRoom = new LinkedList<>();
     }
 
     public void sendObject(Object object){
@@ -48,8 +50,9 @@ public class Client {
     public void sendRequestForUserList(){
         new ForwardServer(new Message<Void>(null, OperationType.SENDUSERNAMES)).start();
     }
-    public void sendRequestForCreateRoom(Room room) {
+    public void sendRequestForCreateRoom(Room room, RoomListener listener) {
         new ForwardServer(new Message<Room>(room, OperationType.CREATEROOM));
+        this.listenersOfRoom.add(listener);
     }
 
     public boolean checkUserNameForConvenience(String username) {
@@ -84,7 +87,7 @@ public class Client {
         return result.get();
     }
 
-    public void addListener(UserListener listener){
+    public void addUserListener(UserListener listener){
         this.listenersOfUser.add(listener);
     }
 
@@ -136,13 +139,14 @@ public class Client {
                                 UserListener listener = listenersOfUser.peek();
                                 if (listener != null){
                                     listener.getUsersInfo(result);
-                                }else{
-                                    // Todo: Send Nack
                                 }
                                 break;
                             case CREATEROOM:
                                 Room room = (Room) ((Message) message).targetObj;
-
+                                RoomListener roomListener = listenersOfRoom.poll();
+                                if(roomListener != null){
+                                    roomListener.getRoomInfo(room);
+                                }
                                 break;
                         }
                     }

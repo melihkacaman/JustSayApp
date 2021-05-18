@@ -4,6 +4,7 @@ package com.melihkacaman.serverapp.server;
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
+import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpClient;
 import com.melihkacaman.serverapp.businnes.ServerManager;
@@ -54,6 +55,13 @@ public class SClient implements Runnable, OpClient {
                             Message<User[]> result = new Message<>(userNames, OperationType.SENDUSERNAMES);
                             cOutput.writeObject(result);
                             // Todo: you migth use the readObj again to check ack from client.
+                            break;
+                        case CREATEROOM:
+                            Room respondRoom = (Room) ((Message) message).targetObj;
+                            Room room = new Room(serverManager.getRoomCount(), respondRoom.getName(), respondRoom.getTopic(), respondRoom.getOwner());
+                            serverManager.increaseRoom();
+                            serverManager.addRoom(room);
+                            cOutput.writeObject(new Message<Room>(room, OperationType.CREATEROOM));
                             break;
                     }
                 }

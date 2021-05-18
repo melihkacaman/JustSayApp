@@ -81,7 +81,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         btnInRoom.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(),"new room",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(), CreateRoomActivity.class));
         });
 
         btnJoinRoom.setOnClickListener(v -> {

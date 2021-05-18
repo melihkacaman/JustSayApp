@@ -41,12 +41,12 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
 
         // first loading
         client.sendRequestForUserList();
-        client.addListener(this);
+        client.addUserListener(this);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             handler.postDelayed(() -> {
                 client.sendRequestForUserList();
-                client.addListener(CreateChatActivity.this);
+                client.addUserListener(CreateChatActivity.this);
                 swipeRefreshLayout.setRefreshing(false);
             }, 500);
         });

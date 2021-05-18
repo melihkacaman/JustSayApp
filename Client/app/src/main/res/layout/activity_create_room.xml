@@ -4,52 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".CreateRoomActivity">
 
     <EditText
-        android:id="@+id/txt_room_topic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="104dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Topic"
-        app:layout_constraintBottom_toTopOf="@+id/btn_create_room"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_room_name" />
-
-    <EditText
         android:id="@+id/txt_room_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="229dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="51dp"
+        android:layout_width="339dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="204dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Title"
-        app:layout_constraintBottom_toTopOf="@+id/txt_room_topic"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/txt_room_topic"
+        android:layout_width="339dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="48dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Topic"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_name" />
+
     <Button
         android:id="@+id/btn_create_room"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="37dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginBottom="217dp"
+        android:layout_width="339dp"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
         android:backgroundTint="@color/purple_500"
-        android:text="CREATE"
         android:onClick="createRoomClick"
+        android:text="CREATE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_room_topic" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_topic"
+        app:layout_constraintVertical_bias="0.256" />
 </androidx.constraintlayout.widget.ConstraintLayout>
