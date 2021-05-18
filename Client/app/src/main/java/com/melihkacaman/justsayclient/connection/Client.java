@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
+import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 
 import java.io.IOException;
@@ -43,9 +44,14 @@ public class Client {
     public void sendObject(Object object){
         new ForwardServer(object).start();
     }
+
     public void sendRequestForUserList(){
         new ForwardServer(new Message<Void>(null, OperationType.SENDUSERNAMES)).start();
     }
+    public void sendRequestForCreateRoom(Room room) {
+        new ForwardServer(new Message<Room>(room, OperationType.CREATEROOM));
+    }
+
     public boolean checkUserNameForConvenience(String username) {
         AtomicBoolean result = new AtomicBoolean(false);
         Message<String> message = new Message<>(username, OperationType.CHECKUSERNAME);
@@ -131,8 +137,12 @@ public class Client {
                                 if (listener != null){
                                     listener.getUsersInfo(result);
                                 }else{
-                                    // Send Nack
+                                    // Todo: Send Nack
                                 }
+                                break;
+                            case CREATEROOM:
+                                Room room = (Room) ((Message) message).targetObj;
+
                                 break;
                         }
                     }

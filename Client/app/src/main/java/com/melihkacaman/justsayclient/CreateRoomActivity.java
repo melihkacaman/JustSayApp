@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.justsayclient.connection.Client;
+import com.melihkacaman.justsayclient.connection.ClientInfo;
 
 public class CreateRoomActivity extends AppCompatActivity {
 
@@ -26,7 +27,13 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     public void createRoomClick(View view) {
         if (!txtRoomName.getText().toString().isEmpty() &&  !txtRoomTopic.getText().toString().isEmpty()){
-            //Room room = new Room(); id ?
+            Room room = new Room(Integer.MIN_VALUE, txtRoomName.getText().toString(),
+                                    txtRoomTopic.getText().toString(), ClientInfo.me);
+            client.sendRequestForCreateRoom(room);
+            txtRoomTopic.setEnabled(false);
+            txtRoomName.setEnabled(false);
+
+            // userListener
         }
     }
 }

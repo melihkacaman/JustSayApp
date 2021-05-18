@@ -2,5 +2,6 @@ package com.melihkacaman.entity;
 
 public enum OperationType {
     CHECKUSERNAME,
-    SENDUSERNAMES, 
+    SENDUSERNAMES,
+    CREATEROOM,
 }
