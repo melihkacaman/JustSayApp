@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JustSayClient">
-        <activity android:name=".CreateRoomActivity"></activity>
+        <activity android:name=".JoinRoomActivity"></activity>
+        <activity android:name=".CreateRoomActivity" />
         <activity android:name=".CreateChatActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".MainActivity">

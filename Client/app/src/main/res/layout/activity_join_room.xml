@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".CreateChatActivity">
+    tools:context=".JoinRoomActivity"
+    android:orientation="vertical">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/swipe_ref1"
+        android:id="@+id/swipe_ref_room"
         >
 
         <LinearLayout
@@ -21,10 +22,10 @@
             >
 
             <TextView
-                android:id="@+id/title_createchat"
+                android:id="@+id/title_existingRoom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="List of Users"
+                android:text="List of Active Rooms"
                 android:elevation="20dp"
                 android:textColor="@color/purple_700"
                 android:textStyle="bold"
@@ -36,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:id="@+id/lst_rcycle"/>
+                android:id="@+id/lst_rcycle_rooms"/>
 
         </LinearLayout>
 

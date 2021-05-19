@@ -50,9 +50,14 @@ public class Client {
     public void sendRequestForUserList(){
         new ForwardServer(new Message<Void>(null, OperationType.SENDUSERNAMES)).start();
     }
+
     public void sendRequestForCreateRoom(Room room, RoomListener listener) {
         new ForwardServer(new Message<Room>(room, OperationType.CREATEROOM)).start();
         this.listenersOfRoom.add(listener);
+    }
+
+    public void sendRequestForRoomList(){
+
     }
 
     public boolean checkUserNameForConvenience(String username) {

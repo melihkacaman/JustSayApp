@@ -35,6 +35,7 @@ public class CreateRoomActivity extends AppCompatActivity {
             txtRoomName.setEnabled(false);
 
             client.sendRequestForCreateRoom(mRoom, ClientInfo::addRoom);
+            // Todo: forward chatscreen 
         }
     }
 }
