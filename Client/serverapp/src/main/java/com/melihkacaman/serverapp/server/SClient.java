@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class SClient implements Runnable, OpClient {
     private int id;
@@ -62,6 +63,11 @@ public class SClient implements Runnable, OpClient {
                             serverManager.increaseRoom();
                             serverManager.addRoom(room);
                             cOutput.writeObject(new Message<Room>(room, OperationType.CREATEROOM));
+                            break;
+                        case SENDROOMSLIST:
+                            User user = (User) ((Message) message).targetObj;
+                            List<Room> rooms = serverManager.getRooms(user);
+                            cOutput.writeObject(new Message<List<Room>>(rooms, OperationType.SENDUSERNAMES));
                             break;
                     }
                 }

@@ -11,6 +11,8 @@ import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.RoomListener;
 
+import java.util.List;
+
 public class CreateRoomActivity extends AppCompatActivity {
 
     EditText txtRoomName, txtRoomTopic;
@@ -34,8 +36,18 @@ public class CreateRoomActivity extends AppCompatActivity {
             txtRoomTopic.setEnabled(false);
             txtRoomName.setEnabled(false);
 
-            client.sendRequestForCreateRoom(mRoom, ClientInfo::addRoom);
-            // Todo: forward chatscreen 
+            client.sendRequestForCreateRoom(mRoom, new RoomListener() {
+                @Override
+                public void getRoomInfo(Room room) {
+                    ClientInfo.addRoom(room);
+                }
+
+                @Override
+                public void getRoomList(List<Room> rooms) {
+                    return;
+                }
+            });
+            // Todo: forward chatscreen
         }
     }
 }

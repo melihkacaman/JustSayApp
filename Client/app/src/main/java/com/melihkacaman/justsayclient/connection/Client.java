@@ -56,8 +56,9 @@ public class Client {
         this.listenersOfRoom.add(listener);
     }
 
-    public void sendRequestForRoomList(){
-
+    public void sendRequestForRoomList(RoomListener listener){
+        new ForwardServer(new Message<User>(ClientInfo.me, OperationType.SENDROOMSLIST)).start();
+        this.listenersOfRoom.add(listener);
     }
 
     public boolean checkUserNameForConvenience(String username) {
@@ -152,6 +153,9 @@ public class Client {
                                 if(roomListener != null){
                                     roomListener.getRoomInfo(room);
                                 }
+                                break;
+                            case SENDROOMSLIST:
+                                //
                                 break;
                         }
                     }

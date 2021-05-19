@@ -13,6 +13,8 @@ import com.melihkacaman.justsayclient.adapters.UserRecyclerViewAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.RoomListener;
 
+import java.util.List;
+
 public class JoinRoomActivity extends AppCompatActivity implements RoomListener {
     private RecyclerView recyclerViewRooms;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -31,10 +33,26 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
+        client.sendRequestForRoomList(new RoomListener() {
+            @Override
+            public void getRoomInfo(Room room) {
+                return;
+            }
+
+            @Override
+            public void getRoomList(List<Room> rooms) {
+                
+            }
+        });
     }
 
     @Override
     public void getRoomInfo(Room room) {
+        return;
+    }
 
+    @Override
+    public void getRoomList(List<Room> rooms) {
+        return;
     }
 }

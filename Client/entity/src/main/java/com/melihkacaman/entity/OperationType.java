@@ -4,4 +4,5 @@ public enum OperationType {
     CHECKUSERNAME,
     SENDUSERNAMES,
     CREATEROOM,
+    SENDROOMSLIST,
 }

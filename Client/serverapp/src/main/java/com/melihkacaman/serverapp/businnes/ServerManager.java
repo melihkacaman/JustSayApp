@@ -7,6 +7,7 @@ import com.melihkacaman.serverapp.absoperation.OpServer;
 import com.melihkacaman.serverapp.server.SClient;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class ServerManager implements OpServer {
 
@@ -71,6 +72,21 @@ public class ServerManager implements OpServer {
             if (!sClient.getUserName().isEmpty()) {
                 result[k] = new User(sClient.getUserName(), sClient.getId());
                 k++;
+            }
+        }
+
+        return result;
+    }
+
+    public List<Room> getRooms(){
+        return rooms;
+    }
+
+    public List<Room> getRooms(User outOfUser){
+        List<Room> result = new LinkedList<>();
+        for (Room room : rooms) {
+            if (!room.getOwner().equals(outOfUser)){
+                result.add(room);
             }
         }
 
