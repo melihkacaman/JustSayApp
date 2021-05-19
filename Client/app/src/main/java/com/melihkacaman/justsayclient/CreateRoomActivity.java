@@ -34,9 +34,7 @@ public class CreateRoomActivity extends AppCompatActivity {
             txtRoomTopic.setEnabled(false);
             txtRoomName.setEnabled(false);
 
-            client.sendRequestForCreateRoom(mRoom, room -> {
-                System.out.println("New room id : " + room.getId() + " name:" + room.getName());
-            });
+            client.sendRequestForCreateRoom(mRoom, ClientInfo::addRoom);
         }
     }
 }
