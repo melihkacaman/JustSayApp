@@ -1,15 +1,18 @@
 package com.melihkacaman.justsayclient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 
 import com.melihkacaman.entity.Room;
-import com.melihkacaman.justsayclient.adapters.UserRecyclerViewAdapter;
+import com.melihkacaman.justsayclient.adapters.CustomRecyclerAdapter;
+import com.melihkacaman.justsayclient.adapters.RoomAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.RoomListener;
 
@@ -18,8 +21,7 @@ import java.util.List;
 public class JoinRoomActivity extends AppCompatActivity implements RoomListener {
     private RecyclerView recyclerViewRooms;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private UserRecyclerViewAdapter adapter; // TODO: 19.05.2021 change the name of this class
-
+    RoomAdapter adapter;
     Handler handler;
 
     private Client client;
@@ -34,6 +36,7 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
         client.sendRequestForRoomList(this);
+
     }
 
     @Override
@@ -43,7 +46,14 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
 
     @Override
     public void getRoomList(List<Room> rooms) {
-        System.out.println("Thread Name: " + Thread.currentThread().getName());
-        System.out.println("SIZE " + rooms.size());
+        runOnUiThread(() -> {
+            recyclerViewRooms.setLayoutManager(new LinearLayoutManager(JoinRoomActivity.this));
+            adapter = new RoomAdapter(JoinRoomActivity.this, rooms);
+            adapter.setItemClickListener((view, position) -> {
+                adapter.getDataByPosition(position);
+            });
+
+            recyclerViewRooms.setAdapter(adapter);
+        });
     }
 }

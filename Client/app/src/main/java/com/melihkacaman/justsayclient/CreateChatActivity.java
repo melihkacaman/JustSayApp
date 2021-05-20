@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.melihkacaman.entity.User;
-import com.melihkacaman.justsayclient.adapters.UserRecyclerViewAdapter;
+import com.melihkacaman.justsayclient.adapters.UserAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.UserListener;
@@ -21,7 +21,7 @@ import java.util.List;
 public class CreateChatActivity extends AppCompatActivity implements UserListener {
 
     RecyclerView rcycleUsersList;
-    UserRecyclerViewAdapter adapter;
+    UserAdapter adapter;
 
     Handler handler;
     Client client;
@@ -65,7 +65,7 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
 
             runOnUiThread(() -> {
                 rcycleUsersList.setLayoutManager(new LinearLayoutManager(CreateChatActivity.this));
-                adapter = new UserRecyclerViewAdapter(CreateChatActivity.this, adapterData);
+                adapter = new UserAdapter(CreateChatActivity.this, adapterData);
                 adapter.setItemClickListener((view, position) -> {
                     // Todo: when clicked do something, in a new page.
                     adapter.getDataByPosition(position);

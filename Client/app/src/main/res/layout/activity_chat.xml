@@ -85,7 +85,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="40dp"
         android:text="With Person"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_700"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/add_fab"
         app:layout_constraintEnd_toStartOf="@+id/person_float" />
@@ -110,7 +110,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="64dp"
         android:text="Create Room"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_700"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_person"
         app:layout_constraintEnd_toStartOf="@+id/room_float" />
@@ -134,7 +134,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="64dp"
         android:text="Join a Room"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_700"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_room"
         app:layout_constraintEnd_toStartOf="@+id/join_float" />

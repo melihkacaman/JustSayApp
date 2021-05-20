@@ -8,15 +8,33 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/lst_img"
-        android:src="@drawable/lst_user_foreground"
-        android:elevation="25dp"/>
+        android:src="@drawable/lst_user_foreground_foreground"
+        android:elevation="25dp"
+        android:layout_margin="10dp"/>
 
-    <TextView
-        android:id="@+id/txt_lst_username"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Melih Kacaman"
-        android:layout_margin="20dp"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/txt_lst_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Melih Kacaman"
+            android:layout_weight="1"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/txt_lst_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Description"
+
+            android:textSize="15sp"/>
+
+
+    </LinearLayout>
 </LinearLayout>
