@@ -67,7 +67,7 @@ public class SClient implements Runnable, OpClient {
                         case SENDROOMSLIST:
                             User user = (User) ((Message) message).targetObj;
                             List<Room> rooms = serverManager.getRooms(user);
-                            cOutput.writeObject(new Message<List<Room>>(rooms, OperationType.SENDUSERNAMES));
+                            cOutput.writeObject(new Message<List<Room>>(rooms, OperationType.SENDROOMSLIST));
                             break;
                     }
                 }

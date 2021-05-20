@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -155,7 +156,11 @@ public class Client {
                                 }
                                 break;
                             case SENDROOMSLIST:
-                                //
+                                List<Room> rooms = (List<Room>) ((Message) message).targetObj;
+                                RoomListener roomListener1 = listenersOfRoom.poll();
+                                if (roomListener1 != null){
+                                    roomListener1.getRoomList(rooms);
+                                }
                                 break;
                         }
                     }

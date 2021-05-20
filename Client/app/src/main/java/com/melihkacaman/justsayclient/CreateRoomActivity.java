@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.justsayclient.connection.Client;
@@ -47,7 +48,8 @@ public class CreateRoomActivity extends AppCompatActivity {
                     return;
                 }
             });
-            // Todo: forward chatscreen
+            Toast.makeText(getApplicationContext(),"Room just has been created by you. You can see it your chat menu."
+                    ,Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -33,17 +33,7 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
-        client.sendRequestForRoomList(new RoomListener() {
-            @Override
-            public void getRoomInfo(Room room) {
-                return;
-            }
-
-            @Override
-            public void getRoomList(List<Room> rooms) {
-                
-            }
-        });
+        client.sendRequestForRoomList(this);
     }
 
     @Override
@@ -53,6 +43,7 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
 
     @Override
     public void getRoomList(List<Room> rooms) {
-        return;
+        System.out.println("Thread Name: " + Thread.currentThread().getName());
+        System.out.println("SIZE " + rooms.size());
     }
 }
