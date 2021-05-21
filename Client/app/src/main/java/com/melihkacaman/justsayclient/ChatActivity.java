@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,6 @@ public class ChatActivity extends AppCompatActivity {
         userName = bundle.getString("username");
 
         menu = findViewById(R.id.add_fab);
-
         btnWithPerson = findViewById(R.id.person_float);
         btnInRoom = findViewById(R.id.room_float);
         btnJoinRoom = findViewById(R.id.join_float);
@@ -100,5 +100,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void btnLeaveClick(View view) {
+        // TODO: 21.05.2021 when user pushes the button, the client will end under control.
     }
 }

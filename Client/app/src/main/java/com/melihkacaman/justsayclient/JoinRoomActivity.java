@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.justsayclient.adapters.CustomRecyclerAdapter;
@@ -24,6 +25,7 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
     RoomAdapter adapter;
     Handler handler;
 
+
     private Client client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,17 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         client.sendRequestForRoomList(this);
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

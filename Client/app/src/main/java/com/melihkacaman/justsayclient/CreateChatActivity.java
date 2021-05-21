@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -67,8 +68,10 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
                 rcycleUsersList.setLayoutManager(new LinearLayoutManager(CreateChatActivity.this));
                 adapter = new UserAdapter(CreateChatActivity.this, adapterData);
                 adapter.setItemClickListener((view, position) -> {
-                    // Todo: when clicked do something, in a new page.
-                    adapter.getDataByPosition(position);
+                    User selected = adapter.getDataByPosition(position);
+                    Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+                    intent.putExtra("selectedUser" , selected);
+                    startActivity(intent);
                 });
                 rcycleUsersList.setAdapter(adapter);
             });
