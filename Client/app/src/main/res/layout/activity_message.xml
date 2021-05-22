@@ -93,7 +93,8 @@
             android:background="?attr/selectableItemBackground"
             android:text="Send"
             android:elevation="20dp"
-            android:textColor="@color/purple_700" />
+            android:textColor="@color/purple_700"
+            android:onClick="btnSendClick"/>
 
     </RelativeLayout>
 

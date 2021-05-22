@@ -3,6 +3,7 @@ package com.melihkacaman.justsayclient.connection;
 import android.os.AsyncTask;
 
 import com.melihkacaman.entity.ACKType;
+import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
@@ -60,6 +61,10 @@ public class Client {
     public void sendRequestForRoomList(RoomListener listener){
         new ForwardServer(new Message<User>(ClientInfo.me, OperationType.SENDROOMSLIST)).start();
         this.listenersOfRoom.add(listener);
+    }
+
+    public void sendChatMessage(ChatMessage chatMessage){
+        new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
     }
 
     public boolean checkUserNameForConvenience(String username) {

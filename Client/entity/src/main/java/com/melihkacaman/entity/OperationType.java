@@ -5,4 +5,6 @@ public enum OperationType {
     SENDUSERNAMES,
     CREATEROOM,
     SENDROOMSLIST,
+    SENDCHATMESSAGE,
+
 }

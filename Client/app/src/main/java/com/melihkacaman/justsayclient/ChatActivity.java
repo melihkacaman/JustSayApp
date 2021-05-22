@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.melihkacaman.entity.User;
+import com.melihkacaman.justsayclient.connection.ClientInfo;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -29,8 +31,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        Bundle bundle = getIntent().getExtras();
-        userName = bundle.getString("username");
+        if(ClientInfo.me == null){
+            Bundle bundle = getIntent().getExtras();
+            userName = bundle.getString("username");
+        }
 
         menu = findViewById(R.id.add_fab);
         btnWithPerson = findViewById(R.id.person_float);
@@ -101,5 +105,9 @@ public class ChatActivity extends AppCompatActivity {
 
     public void btnLeaveClick(View view) {
         // TODO: 21.05.2021 when user pushes the button, the client will end under control.
+        Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+        intent.putExtra("selectedUser", new User("melih", 213));
+        startActivity(intent);
+
     }
 }

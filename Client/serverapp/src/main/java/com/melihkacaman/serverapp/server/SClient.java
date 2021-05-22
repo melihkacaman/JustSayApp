@@ -2,6 +2,7 @@ package com.melihkacaman.serverapp.server;
 
 
 import com.melihkacaman.entity.ACKType;
+import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
@@ -68,6 +69,10 @@ public class SClient implements Runnable, OpClient {
                             User user = (User) ((Message) message).targetObj;
                             List<Room> rooms = serverManager.getRooms(user);
                             cOutput.writeObject(new Message<List<Room>>(rooms, OperationType.SENDROOMSLIST));
+                            break;
+                        case SENDCHATMESSAGE:
+                            ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
+
                             break;
                     }
                 }

@@ -75,6 +75,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         return mMessageList.size();
     }
 
+    public int insertItem(ChatMessage chatMessage){
+        this.mMessageList.add(chatMessage);
+        notifyDataSetChanged();
+        return this.mMessageList.size() - 1;
+    }
+
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText;
         ImageView profileImage;
