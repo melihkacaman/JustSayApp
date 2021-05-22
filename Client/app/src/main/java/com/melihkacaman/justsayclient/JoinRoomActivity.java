@@ -37,9 +37,6 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         client.sendRequestForRoomList(this);
 
     }

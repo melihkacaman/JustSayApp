@@ -35,6 +35,10 @@ public class UserAdapter extends CustomRecyclerAdapter<User> {
         return datasource.size();
     }
 
+    public void addItem(User user){
+        this.datasource.add(user);
+    }
+
     public User getDataByPosition(int position){
         return datasource.get(position);
     }

@@ -17,13 +17,14 @@ import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.UserListener;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CreateChatActivity extends AppCompatActivity implements UserListener {
 
     RecyclerView rcycleUsersList;
     UserAdapter adapter;
-
+    List<User> adapterData;
     Handler handler;
     Client client;
 
@@ -39,6 +40,17 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
         swipeRefreshLayout = findViewById(R.id.swipe_ref1);
         rcycleUsersList = findViewById(R.id.lst_rcycle);
         handler = new Handler(Looper.getMainLooper());
+        adapterData = new LinkedList<>();
+
+        rcycleUsersList.setLayoutManager(new LinearLayoutManager(CreateChatActivity.this));
+        adapter = new UserAdapter(CreateChatActivity.this, adapterData);
+        adapter.setItemClickListener((view, position) -> {
+            User selected = adapter.getDataByPosition(position);
+            Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+            intent.putExtra("selectedUser" , selected);
+            startActivity(intent);
+        });
+        rcycleUsersList.setAdapter(adapter);
 
         // first loading
         client.sendRequestForUserList();
@@ -56,24 +68,15 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
     @Override
     public void getUsersInfo(User[] users) {
         if (users.length > 1) {
-            List<User> adapterData = new ArrayList<>();
             for (User user : users) {
-                if (user.getId() != ClientInfo.me.getId()) {
-                    adapterData.add(user);
+                if (!adapterData.contains(user) && user.getId() != ClientInfo.me.getId()){
+                    adapter.addItem(user);
                 }
             }
 
 
             runOnUiThread(() -> {
-                rcycleUsersList.setLayoutManager(new LinearLayoutManager(CreateChatActivity.this));
-                adapter = new UserAdapter(CreateChatActivity.this, adapterData);
-                adapter.setItemClickListener((view, position) -> {
-                    User selected = adapter.getDataByPosition(position);
-                    Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-                    intent.putExtra("selectedUser" , selected);
-                    startActivity(intent);
-                });
-                rcycleUsersList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             });
         }
     }

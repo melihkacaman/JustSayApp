@@ -82,7 +82,6 @@ public class MessageActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
         chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(chatMessage));
-        System.out.println("Mesaj: " + chatMessage.getMessage());
     }
 
     @Override
