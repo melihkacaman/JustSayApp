@@ -1,6 +1,7 @@
 package com.melihkacaman.serverapp.businnes;
 
 
+import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpServer;
@@ -22,6 +23,16 @@ public class ServerManager implements OpServer {
     private ServerManager() {
         users = new LinkedList<>();
         rooms = new LinkedList<>();
+    }
+
+    public boolean sendChatMessageUserToUser(ChatMessage message){
+        for (SClient sClient : users) {
+            if(message.getReceiver().getId() == sClient.getId()){
+              return sClient.sendMessage(message);
+            }
+        }
+
+        return false;
     }
 
     @Override

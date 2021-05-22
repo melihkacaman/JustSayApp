@@ -74,4 +74,14 @@ public class MessageActivity extends AppCompatActivity {
             edtMessageText.setText("");
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

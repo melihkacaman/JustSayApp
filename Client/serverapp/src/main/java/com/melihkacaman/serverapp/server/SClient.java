@@ -72,7 +72,10 @@ public class SClient implements Runnable, OpClient {
                             break;
                         case SENDCHATMESSAGE:
                             ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
-
+                            boolean ack = serverManager.sendChatMessageUserToUser(chatMessage);
+                            if (!ack){
+                                // TODO: 22.05.2021 migth send ack, repeat the message again.
+                            }
                             break;
                     }
                 }
@@ -80,6 +83,17 @@ public class SClient implements Runnable, OpClient {
                 e.printStackTrace();
                 break;
             }
+        }
+    }
+
+    @Override
+    public boolean sendMessage(ChatMessage message) {
+        try {
+            cOutput.writeObject(message);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

@@ -167,6 +167,10 @@ public class Client {
                                     roomListener1.getRoomList(rooms);
                                 }
                                 break;
+                            case SENDCHATMESSAGE:
+                                ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
+
+                                break;
                         }
                     }
                 } catch (ClassNotFoundException | IOException e) {
