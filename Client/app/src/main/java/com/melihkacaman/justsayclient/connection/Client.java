@@ -150,10 +150,7 @@ public class Client {
                         switch (((Message) message).operationType){
                             case SENDUSERNAMES:
                                 User[] result = (User[]) ((Message) message).targetObj;
-                                UserListener listener = listenersOfUser.peek();
-                                if (listener != null){
-                                    listener.getUsersInfo(result);
-                                }
+                                EventBus.getDefault().post(result);
                                 break;
                             case CREATEROOM:
                                 Room room = (Room) ((Message) message).targetObj;

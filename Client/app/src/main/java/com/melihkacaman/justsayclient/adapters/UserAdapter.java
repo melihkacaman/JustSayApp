@@ -37,9 +37,19 @@ public class UserAdapter extends CustomRecyclerAdapter<User> {
 
     public void addItem(User user){
         this.datasource.add(user);
+        notifyDataSetChanged();
     }
 
     public User getDataByPosition(int position){
         return datasource.get(position);
+    }
+
+    public boolean contains(User user){
+        for (User usr : this.datasource) {
+            if (user.getId() == usr.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 }

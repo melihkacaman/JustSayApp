@@ -16,11 +16,15 @@ import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.UserListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreateChatActivity extends AppCompatActivity implements UserListener {
+public class CreateChatActivity extends AppCompatActivity {
 
     RecyclerView rcycleUsersList;
     UserAdapter adapter;
@@ -54,30 +58,36 @@ public class CreateChatActivity extends AppCompatActivity implements UserListene
 
         // first loading
         client.sendRequestForUserList();
-        client.addUserListener(this);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             handler.postDelayed(() -> {
                 client.sendRequestForUserList();
-                client.addUserListener(CreateChatActivity.this);
                 swipeRefreshLayout.setRefreshing(false);
             }, 500);
         });
     }
 
-    @Override
-    public void getUsersInfo(User[] users) {
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(User[] users){
         if (users.length > 1) {
             for (User user : users) {
-                if (!adapterData.contains(user) && user.getId() != ClientInfo.me.getId()){
+                if (!adapter.contains(user) && user.getId() != ClientInfo.me.getId()){
                     adapter.addItem(user);
                 }
             }
-
-
-            runOnUiThread(() -> {
-                adapter.notifyDataSetChanged();
-            });
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
