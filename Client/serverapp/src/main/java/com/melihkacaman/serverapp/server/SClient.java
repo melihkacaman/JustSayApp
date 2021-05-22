@@ -89,7 +89,7 @@ public class SClient implements Runnable, OpClient {
     @Override
     public boolean sendMessage(ChatMessage message) {
         try {
-            cOutput.writeObject(message);
+            cOutput.writeObject(new Message<ChatMessage>(message, OperationType.SENDCHATMESSAGE));
             return true;
         } catch (IOException e) {
             e.printStackTrace();

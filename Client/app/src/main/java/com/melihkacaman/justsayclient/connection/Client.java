@@ -9,6 +9,8 @@ import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -169,7 +171,7 @@ public class Client {
                                 break;
                             case SENDCHATMESSAGE:
                                 ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
-
+                                EventBus.getDefault().post(chatMessage);
                                 break;
                         }
                     }
