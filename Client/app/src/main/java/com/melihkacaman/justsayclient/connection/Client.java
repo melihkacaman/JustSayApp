@@ -161,10 +161,7 @@ public class Client {
                                 break;
                             case SENDROOMSLIST:
                                 List<Room> rooms = (List<Room>) ((Message) message).targetObj;
-                                RoomListener roomListener1 = listenersOfRoom.poll();
-                                if (roomListener1 != null){
-                                    roomListener1.getRoomList(rooms);
-                                }
+                                EventBus.getDefault().post(rooms);
                                 break;
                             case SENDCHATMESSAGE:
                                 ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;

@@ -12,19 +12,27 @@ import android.view.View;
 import android.widget.Toolbar;
 
 import com.melihkacaman.entity.Room;
+import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.adapters.CustomRecyclerAdapter;
 import com.melihkacaman.justsayclient.adapters.RoomAdapter;
+import com.melihkacaman.justsayclient.adapters.UserAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.RoomListener;
+import com.melihkacaman.justsayclient.model.Chat;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.LinkedList;
 import java.util.List;
 
-public class JoinRoomActivity extends AppCompatActivity implements RoomListener {
+public class JoinRoomActivity extends AppCompatActivity{
     private RecyclerView recyclerViewRooms;
     private SwipeRefreshLayout swipeRefreshLayout;
-    RoomAdapter adapter;
+    UserAdapter adapter;
     Handler handler;
-
+    List<User> rooms;
 
     private Client client;
     @Override
@@ -37,8 +45,15 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
-        client.sendRequestForRoomList(this);
+        rooms = new LinkedList<>();
 
+        recyclerViewRooms.setLayoutManager(new LinearLayoutManager(JoinRoomActivity.this));
+        adapter = new UserAdapter(JoinRoomActivity.this, rooms);
+        adapter.setItemClickListener((view, position) -> {
+            adapter.getDataByPosition(position);
+        });
+
+        recyclerViewRooms.setAdapter(adapter);
     }
 
     @Override
@@ -47,21 +62,25 @@ public class JoinRoomActivity extends AppCompatActivity implements RoomListener 
         return true;
     }
 
-    @Override
-    public void getRoomInfo(Room room) {
-        return;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(List<Room> rooms){
+        for (User usr : rooms){
+            if (!adapter.contains(usr)){
+                adapter.addItem(usr);
+            }
+        }
     }
 
     @Override
-    public void getRoomList(List<Room> rooms) {
-        runOnUiThread(() -> {
-            recyclerViewRooms.setLayoutManager(new LinearLayoutManager(JoinRoomActivity.this));
-            adapter = new RoomAdapter(JoinRoomActivity.this, rooms);
-            adapter.setItemClickListener((view, position) -> {
-                adapter.getDataByPosition(position);
-            });
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-            recyclerViewRooms.setAdapter(adapter);
-        });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

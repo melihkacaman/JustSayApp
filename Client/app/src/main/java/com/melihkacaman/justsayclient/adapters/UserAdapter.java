@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.R;
 
@@ -27,7 +28,13 @@ public class UserAdapter extends CustomRecyclerAdapter<User> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtName.setText(datasource.get(position).getUserName());
-        holder.txtDescription.setVisibility(View.INVISIBLE);
+        if (datasource.get(position) instanceof Room){
+            holder.txtDescription.setText(((Room) datasource.get(position)).getTopic());
+            holder.image.setImageResource(R.drawable.lst_group);
+        }else {
+            holder.txtDescription.setVisibility(View.INVISIBLE);
+            holder.image.setImageResource(R.drawable.lst_user_foreground_foreground);
+        }
     }
 
     @Override
