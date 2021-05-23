@@ -45,4 +45,7 @@ public class ClientInfo {
         return null;
     }
 
+    public static List<Chat> getChats() {
+        return chats;
+    }
 }

@@ -1,6 +1,8 @@
 package com.melihkacaman.justsayclient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.User;
+import com.melihkacaman.justsayclient.adapters.ChatAdapter;
+import com.melihkacaman.justsayclient.adapters.UserAdapter;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,12 +28,13 @@ public class ChatActivity extends AppCompatActivity {
     private FloatingActionButton btnWithPerson, btnInRoom, btnJoinRoom;
     private ExtendedFloatingActionButton menu;
     private TextView txtWithPerson, txtInRoom, txtJoinRoom;
-
     private TextView txtUsername;
+    private RecyclerView recyclerChats;
 
     private boolean isAllFabsVisible;
 
     private String userName;
+    private ChatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +43,12 @@ public class ChatActivity extends AppCompatActivity {
 
         if(ClientInfo.me == null){
             Bundle bundle = getIntent().getExtras();
-            userName = bundle.getString("username");
+            userName = bundle.getString("username");    // TODO: 23.05.2021 will be fixed.
         }
 
         menu = findViewById(R.id.add_fab);
+        recyclerChats = findViewById(R.id.recyclerChats);
+
         btnWithPerson = findViewById(R.id.person_float);
         btnInRoom = findViewById(R.id.room_float);
         btnJoinRoom = findViewById(R.id.join_float);
@@ -96,6 +103,12 @@ public class ChatActivity extends AppCompatActivity {
         btnJoinRoom.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), JoinRoomActivity.class));
         });
+
+        adapter = new ChatAdapter(getApplicationContext(), ClientInfo.getChats());
+        recyclerChats.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+        adapter.setItemClickListener((view, position) -> {
+
+        });
     }
 
     private void setVisibleFabs(int state){
@@ -114,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-        // When a new message comes, what will happen ? 
+        
     }
 
     @Override
