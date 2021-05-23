@@ -13,9 +13,6 @@ public class Room extends User {
     private Date creationTime;
     private Date lastUpdatedTime;
 
-    private List<ChatMessage> messages;
-
-
     public Room(String name, String topic, User owner) {
         super(name);
 
@@ -25,7 +22,6 @@ public class Room extends User {
         this.users = new LinkedList<>();
         this.creationTime = new Date(System.currentTimeMillis());
         this.lastUpdatedTime = new Date(System.currentTimeMillis());
-        this.messages = new LinkedList<>();
     }
 
     public String getTopic() {
@@ -50,9 +46,5 @@ public class Room extends User {
 
     public void addUser(User user){
         users.add(user);
-    }
-
-    public List<ChatMessage> getMessages() {
-        return messages;
     }
 }

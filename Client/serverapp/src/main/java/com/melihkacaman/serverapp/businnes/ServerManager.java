@@ -68,7 +68,7 @@ public class ServerManager implements OpServer {
         SClient user = null;
 
         for (SClient sClient : users) {
-            if (sClient.getUserName() != null && sClient.getUserName().equals(userName)) {
+            if (sClient.getUser() != null && sClient.getUser().getUserName().equals(userName)) {
                 user = sClient;
             }
         }
@@ -80,8 +80,8 @@ public class ServerManager implements OpServer {
         User[] result = new User[users.size()];
         int k = 0;
         for (SClient sClient : users) {
-            if (!sClient.getUserName().isEmpty()) {
-                result[k] = new User(sClient.getUserName(), sClient.getId());
+            if (sClient.getUser() != null) {
+                result[k] = sClient.getUser();
                 k++;
             }
         }

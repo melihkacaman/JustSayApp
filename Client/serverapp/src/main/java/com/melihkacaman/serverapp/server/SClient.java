@@ -21,7 +21,7 @@ public class SClient implements Runnable, OpClient {
     private Socket socket;
     private ObjectOutputStream cOutput;
     private ObjectInputStream cInput;
-    private String userName;
+    private User user;
 
     private ServerManager serverManager;
 
@@ -46,8 +46,9 @@ public class SClient implements Runnable, OpClient {
                     switch (((Message) message).operationType){
                         case CHECKUSERNAME:
                             if (serverManager.checkUserNameForConvenience(((Message) message).targetObj.toString())){
-                                userName = ((Message) message).targetObj.toString();
-                                cOutput.writeObject(new User(userName));
+                                String userName = ((Message) message).targetObj.toString();
+                                user = new User(userName);
+                                cOutput.writeObject(user);
                             }else {
                                 ACK(ACKType.FAILURE);
                             }
@@ -60,7 +61,7 @@ public class SClient implements Runnable, OpClient {
                             break;
                         case CREATEROOM:
                             Room respondRoom = (Room) ((Message) message).targetObj;
-                            Room room = new Room(serverManager.getRoomCount(), respondRoom.getName(), respondRoom.getTopic(), respondRoom.getOwner());
+                            Room room = new Room(respondRoom.getUserName(), respondRoom.getTopic(), respondRoom.getOwner());
                             serverManager.increaseRoom();
                             serverManager.addRoom(room);
                             cOutput.writeObject(new Message<Room>(room, OperationType.CREATEROOM));
@@ -115,8 +116,8 @@ public class SClient implements Runnable, OpClient {
         return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public User getUser() {
+        return this.user;
     }
 }
 

@@ -11,6 +11,7 @@ import com.melihkacaman.entity.Room;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.RoomListener;
+import com.melihkacaman.justsayclient.model.Chat;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CreateRoomActivity extends AppCompatActivity {
             client.sendRequestForCreateRoom(mRoom, new RoomListener() {
                 @Override
                 public void getRoomInfo(Room room) {
-                    ClientInfo.addRoom(room);
+                    ClientInfo.addChat(new Chat(room));
                 }
 
                 @Override
@@ -50,6 +51,7 @@ public class CreateRoomActivity extends AppCompatActivity {
             });
             Toast.makeText(getApplicationContext(),"Room just has been created by you. You can see it your chat menu."
                     ,Toast.LENGTH_LONG).show();
+            // TODO: 23.05.2021 forward chat activity.
         }
     }
 }

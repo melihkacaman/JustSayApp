@@ -169,6 +169,7 @@ public class Client {
                             case SENDCHATMESSAGE:
                                 ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
                                 EventBus.getDefault().post(chatMessage);
+                                // TODO: 23.05.2021 notification will be added.
                                 break;
                         }
                     }

@@ -11,8 +11,13 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -105,5 +110,22 @@ public class ChatActivity extends AppCompatActivity {
 
     public void btnLeaveClick(View view) {
         // TODO: 21.05.2021 when user pushes the button, the client will end under control.
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ChatMessage chatMessage){
+        // When a new message comes, what will happen ? 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -13,20 +13,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.melihkacaman.entity.ChatMessage;
-import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.adapters.MessageListAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
+import com.melihkacaman.justsayclient.model.Chat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public class MessageActivity extends AppCompatActivity {
     private RecyclerView chatRecycler;
@@ -39,9 +37,9 @@ public class MessageActivity extends AppCompatActivity {
     private Button btnSend;
 
     private Client client;
-    private User pair;
+    private Chat chat;
 
-    private List<ChatMessage> messageList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +47,17 @@ public class MessageActivity extends AppCompatActivity {
         client = Client.getInstance();
 
         Bundle extras = getIntent().getExtras();
-        pair = (User) extras.getSerializable("selectedUser");  // TODO: 22.05.2021 user can leave ?
-
-        messageList = new LinkedList<>();
+        User selectedUser = (User) extras.getSerializable("selectedUser");
+        Chat prev = ClientInfo.checkPreviousChat(selectedUser);
+        if (prev != null){// TODO: 22.05.2021 user can leave ?
+            chat = prev;
+        }else {
+            chat = new Chat(selectedUser);
+            ClientInfo.addChat(chat);
+        }
 
         txtUsernameTop = findViewById(R.id.txt_username_message);
-        txtUsernameTop.setText(pair.getUserName());
+        txtUsernameTop.setText(chat.getWho().getUserName());
 
         imgBackButton = findViewById(R.id.back_button);
         imgBackButton.setOnClickListener(v -> {
@@ -65,14 +68,14 @@ public class MessageActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_gchat_send);
 
         chatRecycler = findViewById(R.id.recycler_gchat);
-        messageListAdapter = new MessageListAdapter(this, messageList);
+        messageListAdapter = new MessageListAdapter(this, chat.getMessages());
         chatRecycler.setLayoutManager(new LinearLayoutManager(this));
         chatRecycler.setAdapter(messageListAdapter);
     }
 
     public void btnSendClick(View view) {
         if (!edtMessageText.getText().toString().isEmpty()){
-            ChatMessage chatMessage = new ChatMessage(ClientInfo.me, pair,edtMessageText.getText().toString());
+            ChatMessage chatMessage = new ChatMessage(ClientInfo.me, chat.getWho(),edtMessageText.getText().toString());
             client.sendChatMessage(chatMessage);
             chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(chatMessage));
             edtMessageText.setText("");
