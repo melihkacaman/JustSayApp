@@ -46,7 +46,6 @@ public class JoinRoomActivity extends AppCompatActivity{
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
 
         rooms = new LinkedList<>();
-
         recyclerViewRooms.setLayoutManager(new LinearLayoutManager(JoinRoomActivity.this));
         adapter = new UserAdapter(JoinRoomActivity.this, rooms);
         adapter.setItemClickListener((view, position) -> {
@@ -54,6 +53,15 @@ public class JoinRoomActivity extends AppCompatActivity{
         });
 
         recyclerViewRooms.setAdapter(adapter);
+
+        client.sendRequestForRoomList();
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            handler.postDelayed(() -> {
+                client.sendRequestForRoomList();
+                swipeRefreshLayout.setRefreshing(false);
+            }, 500);
+        });
     }
 
     @Override

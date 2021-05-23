@@ -11,39 +11,43 @@
         android:id="@+id/txt_room_name"
         android:layout_width="339dp"
         android:layout_height="52dp"
-        android:layout_marginTop="269dp"
-        android:layout_marginBottom="39dp"
+        android:layout_marginTop="262dp"
+        android:layout_marginBottom="54dp"
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/txt_room_topic"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="35dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/txt_room_topic"
         android:layout_width="339dp"
         android:layout_height="52dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="69dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="63dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Topic"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/btn_create_room"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_room_name" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_create_room"
         android:layout_width="337dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="192dp"
         android:backgroundTint="@color/purple_500"
         android:onClick="createRoomClick"
         android:text="CREATE"
-        tools:layout_editor_absoluteX="37dp"
-        tools:layout_editor_absoluteY="483dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

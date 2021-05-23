@@ -60,9 +60,8 @@ public class Client {
         this.listenersOfRoom.add(listener);
     }
 
-    public void sendRequestForRoomList(RoomListener listener){
+    public void sendRequestForRoomList(){
         new ForwardServer(new Message<User>(ClientInfo.me, OperationType.SENDROOMSLIST)).start();
-        this.listenersOfRoom.add(listener);
     }
 
     public void sendChatMessage(ChatMessage chatMessage){
