@@ -1,13 +1,10 @@
 package com.melihkacaman.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Room extends BaseEntity {
-    private int id;
-    private String name;
+public class Room extends User {
     private String topic;
 
     private List<User> users;
@@ -19,9 +16,9 @@ public class Room extends BaseEntity {
     private List<ChatMessage> messages;
 
 
-    public Room(int id, String name, String topic, User owner) {
-        this.id = id;
-        this.name = name;
+    public Room(String name, String topic, User owner) {
+        super(name);
+
         this.topic = topic;
         this.owner = owner;
 
@@ -29,14 +26,6 @@ public class Room extends BaseEntity {
         this.creationTime = new Date(System.currentTimeMillis());
         this.lastUpdatedTime = new Date(System.currentTimeMillis());
         this.messages = new LinkedList<>();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getTopic() {
@@ -61,5 +50,9 @@ public class Room extends BaseEntity {
 
     public void addUser(User user){
         users.add(user);
+    }
+
+    public List<ChatMessage> getMessages() {
+        return messages;
     }
 }

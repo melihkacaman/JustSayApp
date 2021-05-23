@@ -105,9 +105,5 @@ public class ChatActivity extends AppCompatActivity {
 
     public void btnLeaveClick(View view) {
         // TODO: 21.05.2021 when user pushes the button, the client will end under control.
-        Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-        intent.putExtra("selectedUser", new User("melih", 213));
-        startActivity(intent);
-
     }
 }

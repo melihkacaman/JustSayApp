@@ -27,7 +27,7 @@ public class RoomAdapter extends CustomRecyclerAdapter<Room>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.txtName.setText(datasource.get(position).getName());
+        holder.txtName.setText(datasource.get(position).getUserName());
         holder.txtDescription.setText(datasource.get(position).getTopic());
         holder.image.setImageResource(R.drawable.lst_group);
     }

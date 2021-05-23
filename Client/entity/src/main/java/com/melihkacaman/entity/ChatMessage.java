@@ -9,11 +9,6 @@ public class ChatMessage extends  BaseEntity {
     private long createdAt;
     private String Message;
 
-    private static int idCounter = 0;
-    private static synchronized int getID(){
-        return idCounter++;
-    }
-
     public ChatMessage(User sender, User receiver , String message) {
         this.id = getID();
         this.sender = sender;

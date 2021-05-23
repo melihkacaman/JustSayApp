@@ -35,9 +35,8 @@ public class Server {
         @Override
         public void run() {
             while (!Server.this.socket.isClosed()){
-                System.out.println("[Server.java] Accepting state");
                 try {
-                    synchronized (this){  // this might be error dont forget
+                    synchronized (this){
                         Socket nClient = Server.this.socket.accept();
                         SClient sClient = new SClient(serverManager.getUserCount(), nClient);
                         new Thread(sClient).start();

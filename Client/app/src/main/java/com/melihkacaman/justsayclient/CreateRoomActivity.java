@@ -31,7 +31,7 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     public void createRoomClick(View view) {
         if (!txtRoomName.getText().toString().isEmpty() &&  !txtRoomTopic.getText().toString().isEmpty()){
-            Room mRoom = new Room(Integer.MIN_VALUE, txtRoomName.getText().toString(),
+            Room mRoom = new Room(txtRoomName.getText().toString(),
                                     txtRoomTopic.getText().toString(), ClientInfo.me);
 
             txtRoomTopic.setEnabled(false);

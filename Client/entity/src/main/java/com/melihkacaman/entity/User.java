@@ -6,9 +6,11 @@ public class User extends BaseEntity {
     private String userName;
     private int id;
 
-    public User(String userName, int id) {
+    // TODO: 23.05.2021 List<Room> rooms;
+    
+    public User(String userName) {
         this.userName = userName;
-        this.id = id;
+        this.id = getID();
     }
 
     public String getUserName() {
