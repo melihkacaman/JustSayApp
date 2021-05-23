@@ -16,7 +16,7 @@ public class Room extends BaseEntity {
     private Date creationTime;
     private Date lastUpdatedTime;
 
-    // List<Message> // Todo: When the Message Structure is ready.
+    private List<ChatMessage> messages;
 
 
     public Room(int id, String name, String topic, User owner) {
@@ -28,6 +28,7 @@ public class Room extends BaseEntity {
         this.users = new LinkedList<>();
         this.creationTime = new Date(System.currentTimeMillis());
         this.lastUpdatedTime = new Date(System.currentTimeMillis());
+        this.messages = new LinkedList<>();
     }
 
     public int getId() {
