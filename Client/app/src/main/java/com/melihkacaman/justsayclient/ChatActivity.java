@@ -29,12 +29,14 @@ public class ChatActivity extends AppCompatActivity {
     private ExtendedFloatingActionButton menu;
     private TextView txtWithPerson, txtInRoom, txtJoinRoom;
     private TextView txtUsername;
+
     private RecyclerView recyclerChats;
+    private ChatAdapter adapter;
+
 
     private boolean isAllFabsVisible;
 
     private String userName;
-    private ChatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

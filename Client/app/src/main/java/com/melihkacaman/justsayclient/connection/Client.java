@@ -1,13 +1,11 @@
 package com.melihkacaman.justsayclient.connection;
 
-import android.os.AsyncTask;
-
-import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
+import com.melihkacaman.justsayclient.model.ConvenienceUser;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,7 +16,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Client {
     private Socket socket;
@@ -68,22 +66,22 @@ public class Client {
         new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
     }
 
-    public boolean checkUserNameForConvenience(String username) {
-        AtomicBoolean result = new AtomicBoolean(false);
+    public void checkUserNameForConvenience(String username) {
         Message<String> message = new Message<>(username, OperationType.CHECKUSERNAME);
         sendObject(message);
 
         Thread thread = new Thread(() -> {
             Object ack = null;
             try {
-                System.out.println("Thread içinde");
+                System.out.println("BURDAAAAA");
                 ack = input.readObject();
                 if (ack instanceof User)
                 {
                     ClientInfo.me = (User) ack;
-                    result.set(true);
+                    EventBus.getDefault().post(new ConvenienceUser(true, ClientInfo.me));
                     listenServer.start();
                 }else {
+                    EventBus.getDefault().post(new ConvenienceUser(false, null));
                     throw new Exception("Client NACK!");
                 }
             } catch (Exception e) {
@@ -91,14 +89,8 @@ public class Client {
             }
 
         });
-        try {
-            thread.start();
-            thread.join();// Todo : This locks main threads, change it with loading
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        return result.get();
+        thread.start();
     }
 
     public void addUserListener(UserListener listener){

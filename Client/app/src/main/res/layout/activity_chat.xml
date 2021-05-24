@@ -8,18 +8,18 @@
 
     <TextView
         android:id="@+id/txt_chat_username"
-        android:layout_width="0dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:elevation="50dp"
         android:text="Melih"
         android:textColor="@color/purple_500"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerChats"
-        app:layout_constraintEnd_toStartOf="@+id/button_leave"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Space
         android:id="@+id/space"
@@ -35,15 +35,12 @@
         android:id="@+id/button_leave"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
         android:background="@color/purple_500"
         android:elevation="40dp"
         android:onClick="btnLeaveClick"
         android:text="Leave"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerChats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -2,7 +2,7 @@ package com.melihkacaman.entity;
 
 import java.io.Serializable;
 
-public class User extends BaseEntity {
+public class User implements Serializable {
     private String userName;
     private int id;
 
@@ -19,5 +19,12 @@ public class User extends BaseEntity {
 
     public int getId() {
         return id;
+    }
+
+
+
+    private static int idCounter = 500;
+    private static synchronized int getID(){
+        return idCounter++;
     }
 }

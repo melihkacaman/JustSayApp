@@ -17,7 +17,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.javafaker.Faker;
+import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.connection.Client;
+import com.melihkacaman.justsayclient.connection.ClientInfo;
+import com.melihkacaman.justsayclient.model.ConvenienceUser;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
@@ -54,14 +62,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please, check your internet connection!",Toast.LENGTH_LONG).show();
 
         if (client != null && txtUserName.getText().length() > 0){
-            boolean res = client.checkUserNameForConvenience(txtUserName.getText().toString());
-            if (res){
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra("username", txtUserName.getText().toString());
-                startActivity(intent);
-            }
-            else
-                Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
+            client.checkUserNameForConvenience(txtUserName.getText().toString());
+            btnLogin.setClickable(false);
         }
     }
 
@@ -93,5 +95,31 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ConvenienceUser state){
+        if(state.isConvenience()){
+            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            intent.putExtra("username", txtUserName.getText().toString());
+            ClientInfo.generateFakeData();
+            startActivity(intent);
+        }else {
+            Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
+            txtUserName.setText("");  // todo set delay
+            btnLogin.setClickable(true);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

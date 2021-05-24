@@ -11,12 +11,12 @@
         android:id="@+id/txt_room_name"
         android:layout_width="339dp"
         android:layout_height="52dp"
-        android:layout_marginTop="262dp"
-        android:layout_marginBottom="54dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="37dp"
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/txt_room_topic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,15 +26,15 @@
         android:layout_width="339dp"
         android:layout_height="52dp"
         android:layout_marginStart="35dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="37dp"
-        android:layout_marginBottom="63dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Topic"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/btn_create_room"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_name" />
 
     <Button
         android:id="@+id/btn_create_room"
@@ -43,11 +43,12 @@
         android:layout_gravity="center"
         android:layout_marginStart="37dp"
         android:layout_marginEnd="37dp"
-        android:layout_marginBottom="192dp"
         android:backgroundTint="@color/purple_500"
         android:onClick="createRoomClick"
         android:text="CREATE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_room_topic"
+        app:layout_constraintVertical_bias="0.247" />
 </androidx.constraintlayout.widget.ConstraintLayout>
