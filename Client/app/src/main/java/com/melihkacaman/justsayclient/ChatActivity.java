@@ -127,18 +127,20 @@ public class ChatActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-        
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        System.out.println("CHAT ACTIVITY START ÇALIŞTI");
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        System.out.println("CHAT ACTIVITY STOP ÇALISTI");
         EventBus.getDefault().unregister(this);
     }
 }

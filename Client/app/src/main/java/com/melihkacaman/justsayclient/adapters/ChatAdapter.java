@@ -29,11 +29,10 @@ public class ChatAdapter extends CustomRecyclerAdapter<Chat> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtName.setText(datasource.get(position).getWho().getUserName());
+        holder.txtDescription.setText(datasource.get(position).getLastMessage());
         if (datasource.get(position).getWho() instanceof Room){
-            holder.txtDescription.setText(((Room) datasource.get(position).getWho()).getTopic());
             holder.image.setImageResource(R.drawable.lst_group);
         }else {
-            holder.txtDescription.setVisibility(View.INVISIBLE);
             holder.image.setImageResource(R.drawable.lst_user_foreground_foreground);
         }
     }

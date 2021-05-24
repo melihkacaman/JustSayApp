@@ -38,6 +38,10 @@ public class Chat {
         this.lastMessage = chatMessage.getSender().getUserName() + ": " + chatMessage.getMessage();
     }
 
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
     private static int idCounter = 0;
     private static synchronized int getID(){
         return idCounter++;

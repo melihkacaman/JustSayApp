@@ -76,6 +76,7 @@ public class Client {
         Thread thread = new Thread(() -> {
             Object ack = null;
             try {
+                System.out.println("Thread içinde");
                 ack = input.readObject();
                 if (ack instanceof User)
                 {
