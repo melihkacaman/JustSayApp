@@ -12,11 +12,15 @@ import com.melihkacaman.justsayclient.R;
 import com.melihkacaman.justsayclient.model.Chat;
 
 import java.util.List;
+import java.util.Stack;
 
 public class ChatAdapter extends CustomRecyclerAdapter<Chat> {
 
-    public ChatAdapter(Context context, List<Chat> dataSource) {
-        super(context, dataSource);
+    Stack<Chat> datasource;
+
+    public ChatAdapter(Context context, Stack<Chat> dataSource) {
+        super(context, null);
+        this.datasource = dataSource;
     }
 
     @NonNull
@@ -40,5 +44,9 @@ public class ChatAdapter extends CustomRecyclerAdapter<Chat> {
     @Override
     public int getItemCount() {
         return datasource.size();
+    }
+
+    public Chat getItemById(int position){
+        return this.datasource.elementAt(position);
     }
 }

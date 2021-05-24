@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.adapters.ChatAdapter;
 import com.melihkacaman.justsayclient.adapters.UserAdapter;
@@ -109,8 +110,15 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(getApplicationContext(), ClientInfo.getChats());
         recyclerChats.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
         adapter.setItemClickListener((view, position) -> {
+            if (adapter.getItemById(position).getWho() instanceof Room){
 
+            }else {
+                Intent intent= new Intent(getApplicationContext(), MessageActivity.class);
+                intent.putExtra("selectedUser", adapter.getItemById(position).getWho());
+                startActivity(intent);
+            }
         });
+        recyclerChats.setAdapter(adapter);
     }
 
     private void setVisibleFabs(int state){

@@ -9,10 +9,11 @@ import com.melihkacaman.justsayclient.model.Chat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 public class ClientInfo {
     public static User me;
-    private static List<Chat> chats = new LinkedList<>();
+    private static Stack<Chat> chats = new Stack<>();
 
     public static List<Room> getMyRooms() {
         List<Room> rooms = new LinkedList<>();
@@ -48,7 +49,7 @@ public class ClientInfo {
         return null;
     }
 
-    public static List<Chat> getChats() {
+    public static Stack<Chat> getChats() {
         return chats;
     }
 

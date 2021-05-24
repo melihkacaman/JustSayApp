@@ -48,6 +48,7 @@ public class MessageActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         User selectedUser = (User) extras.getSerializable("selectedUser");
+
         Chat prev = ClientInfo.checkPreviousChat(selectedUser);
         if (prev != null){// TODO: 22.05.2021 user can leave ?
             chat = prev;
