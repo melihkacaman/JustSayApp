@@ -40,6 +40,20 @@ public class ServerManager implements OpServer {
         return findUserByUserName(username) == null;
     }
 
+    @Override
+    public Room addUserToRoom(Room room, User who) {
+        for (Room item : rooms){
+            if (item.getId() == room.getId()){
+                if (!item.contains(who)){
+                    item.addUser(who);
+                    return item;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public int getUserCount() {
         return userCount;
     }
@@ -76,6 +90,28 @@ public class ServerManager implements OpServer {
         return user;
     }
 
+    private SClient findUserById(int id) {
+        SClient user = null;
+
+        for (SClient sClient : users) {
+            if (sClient.getUser() != null && sClient.getUser().getId() == id) {
+                user = sClient;
+            }
+        }
+
+        return user;
+    }
+
+    private Room findRoomById(int id) {
+        for (Room item : rooms) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public User[] getUsers() {
         User[] result = new User[users.size()];
         int k = 0;
@@ -110,5 +146,14 @@ public class ServerManager implements OpServer {
         }
 
         return serverManager;
+    }
+
+    public void sendRoomMessage(ChatMessage chatMessage) {
+        Room room = findRoomById(chatMessage.getReceiver().getId());
+        for(User item : room.getUsers()){
+            if (item.getId() != chatMessage.getSender().getId()){
+                findUserById(item.getId()).sendMessage(chatMessage);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ public class SClient implements Runnable, OpClient {
     private Socket socket;
     private ObjectOutputStream cOutput;
     private ObjectInputStream cInput;
-    private User user;
+    private User user = null;
 
     private ServerManager serverManager;
 
@@ -67,8 +67,8 @@ public class SClient implements Runnable, OpClient {
                             cOutput.writeObject(new Message<Room>(room, OperationType.CREATEROOM));
                             break;
                         case SENDROOMSLIST:
-                            User user = (User) ((Message) message).targetObj;
-                            List<Room> rooms = serverManager.getRooms(user);
+                            User userTarget = (User) ((Message) message).targetObj;
+                            List<Room> rooms = serverManager.getRooms(userTarget);
                             cOutput.writeObject(new Message<List<Room>>(rooms, OperationType.SENDROOMSLIST));
                             break;
                         case SENDCHATMESSAGE:
@@ -77,6 +77,20 @@ public class SClient implements Runnable, OpClient {
                             if (!ack){
                                 // TODO: 22.05.2021 migth send ack, repeat the message again.
                             }
+                            break;
+                        case JOINROOM:
+                            Room targetRoom = (Room) ((Message) message).targetObj;
+                            targetRoom = serverManager.addUserToRoom(targetRoom, user);
+                            if (targetRoom != null){
+                                cOutput.writeObject(new Message<Room>(targetRoom, OperationType.JOINROOM));
+                            }else {
+                                // nack
+                                cOutput.writeObject(new Message<Room>(null, OperationType.JOINROOM));
+                            }
+                            break;
+                        case SENDROOMMESSAGE:
+                            ChatMessage roomMessage = (ChatMessage) ((Message) message).targetObj;
+                            serverManager.sendRoomMessage(roomMessage);
                             break;
                     }
                 }
@@ -91,7 +105,6 @@ public class SClient implements Runnable, OpClient {
     public boolean sendMessage(ChatMessage message) {
         try {
             cOutput.writeObject(new Message<ChatMessage>(message, OperationType.SENDCHATMESSAGE));
-            System.out.println("Message sent to client");
             return true;
         } catch (IOException e) {
             e.printStackTrace();

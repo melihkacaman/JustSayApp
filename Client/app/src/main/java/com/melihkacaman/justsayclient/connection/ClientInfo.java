@@ -39,6 +39,15 @@ public class ClientInfo {
         return null;
     }
 
+    private static Chat getRoomChatById(int id) {
+        for (Chat chat : chats) {
+            if (chat.getWho() instanceof Room && chat.getId() == id)
+                return chat;
+        }
+
+        return null;
+    }
+
     public static Chat checkPreviousChat(User user){
         for (Chat chat : chats) {
             if (chat.getWho().getId() == user.getId()){
@@ -93,17 +102,22 @@ public class ClientInfo {
     }
 
     public static void insertMessage(ChatMessage chatMessage) {
-        Chat prev = checkPreviousChat(chatMessage.getSender());
-        if (prev == null){
-            Chat brandChat = new Chat(chatMessage.getSender());
-            brandChat.addMessage(chatMessage);
-            chats.push(brandChat);
+        if (chatMessage.getReceiver() instanceof Room){
+            Chat roomChat = getRoomChatById(chatMessage.getReceiver().getId());
+            roomChat.addMessage(chatMessage);
         }else {
-            int id = findById(prev.getId());
-            if (id != -1){
-                chats.remove(id);
-                prev.addMessage(chatMessage);
-                chats.push(prev);
+            Chat prev = checkPreviousChat(chatMessage.getSender());
+            if (prev == null){
+                Chat brandChat = new Chat(chatMessage.getSender());
+                brandChat.addMessage(chatMessage);
+                chats.push(brandChat);
+            }else {
+                int id = findById(prev.getId());
+                if (id != -1){
+                    chats.remove(id);
+                    prev.addMessage(chatMessage);
+                    chats.push(prev);
+                }
             }
         }
     }

@@ -65,8 +65,16 @@ public class Client {
         new ForwardServer(new Message<User>(ClientInfo.me, OperationType.SENDROOMSLIST)).start();
     }
 
+    public void sendRequestForJoiningRoom(Room room) {
+        new ForwardServer(new Message<User>(room, OperationType.JOINROOM)).start();
+    }
+
     public void sendChatMessage(ChatMessage chatMessage) {
-        new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
+        if (chatMessage.getReceiver() instanceof Room){
+            new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDROOMMESSAGE)).start();
+        }else {
+            new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
+        }
     }
 
     public void checkUserNameForConvenience(String username) {
@@ -121,6 +129,7 @@ public class Client {
         return client;
     }
 
+
     private class ForwardServer extends Thread {
         Object message;
 
@@ -166,6 +175,10 @@ public class Client {
                                 ClientInfo.insertMessage(chatMessage);
                                 EventBus.getDefault().post(chatMessage);
                                 // TODO: 23.05.2021 notification will be added.
+                                break;
+                            case JOINROOM:
+                                Room joinedRoom = (Room) ((Message) message).targetObj;
+                                EventBus.getDefault().post(joinedRoom);
                                 break;
                         }
                     }

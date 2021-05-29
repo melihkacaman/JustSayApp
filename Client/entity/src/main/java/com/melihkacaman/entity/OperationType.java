@@ -6,5 +6,6 @@ public enum OperationType {
     CREATEROOM,
     SENDROOMSLIST,
     SENDCHATMESSAGE,
-
+    JOINROOM,
+    SENDROOMMESSAGE,
 }

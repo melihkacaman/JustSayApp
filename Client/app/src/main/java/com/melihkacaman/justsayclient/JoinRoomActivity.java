@@ -1,14 +1,19 @@
 package com.melihkacaman.justsayclient;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.melihkacaman.entity.Room;
@@ -28,7 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JoinRoomActivity extends AppCompatActivity{
+public class JoinRoomActivity extends AppCompatActivity {
     private RecyclerView recyclerViewRooms;
     private SwipeRefreshLayout swipeRefreshLayout;
     UserAdapter adapter;
@@ -36,12 +41,13 @@ public class JoinRoomActivity extends AppCompatActivity{
     List<User> rooms;
 
     private Client client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
         client = Client.getInstance();
-        handler =new Handler(Looper.getMainLooper());
+        handler = new Handler(Looper.getMainLooper());
 
         recyclerViewRooms = findViewById(R.id.lst_rcycle_rooms);
         swipeRefreshLayout = findViewById(R.id.swipe_ref_room);
@@ -51,11 +57,19 @@ public class JoinRoomActivity extends AppCompatActivity{
         adapter = new UserAdapter(JoinRoomActivity.this, rooms);
         adapter.setItemClickListener((view, position) -> {
             Room room = (Room) adapter.getDataByPosition(position);
-            if (room.contains(ClientInfo.me)){
-
-            }else {
-                //Todo: Do you want to join this room ?
-
+            if (room.contains(ClientInfo.me)) {
+                Toast.makeText(getApplicationContext(), "You are already a participant of this room.", Toast.LENGTH_LONG).show();
+            } else {
+                //Todo: Would you like to join this room ?
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle("Join");
+                alertDialog.setMessage("Would you like to join ?");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> {
+                            client.sendRequestForJoiningRoom(room);
+                            dialog.dismiss();
+                        });
+                alertDialog.show();
             }
         });
 
@@ -77,11 +91,21 @@ public class JoinRoomActivity extends AppCompatActivity{
         return true;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Room room) {
+        if (room == null) {
+            Toast.makeText(getApplicationContext(), "Something is wrong, please try this again.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "You joined !", Toast.LENGTH_LONG).show();
+            ClientInfo.addChat(new Chat(room));
+            // TODO: 29.05.2021 You will be forwarded message screen
+        }
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(List<Room> rooms){
-        for (User usr : rooms){
-            if (!adapter.contains(usr)){
+    public void onMessageEvent(List<Room> rooms) {
+        for (User usr : rooms) {
+            if (!adapter.contains(usr)) {
                 adapter.addItem(usr);
             }
         }
