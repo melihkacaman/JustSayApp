@@ -47,4 +47,14 @@ public class Room extends User {
     public void addUser(User user){
         users.add(user);
     }
+
+    public boolean contains (User user){
+        for (User item : users) {
+            if (user.getId() == item.getId()){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

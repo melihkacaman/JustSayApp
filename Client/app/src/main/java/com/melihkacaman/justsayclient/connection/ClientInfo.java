@@ -27,7 +27,7 @@ public class ClientInfo {
     }
 
     public static void addChat(Chat chat) {
-        chats.add(chat);
+        chats.push(chat);
     }
 
     public static Chat getChatById(int id) {
@@ -90,5 +90,33 @@ public class ClientInfo {
         }
 
         System.out.println("Static Fake data is passed.");
+    }
+
+    public static void insertMessage(ChatMessage chatMessage) {
+        Chat prev = checkPreviousChat(chatMessage.getSender());
+        if (prev == null){
+            Chat brandChat = new Chat(chatMessage.getSender());
+            brandChat.addMessage(chatMessage);
+            chats.push(brandChat);
+        }else {
+            int id = findById(prev.getId());
+            if (id != -1){
+                chats.remove(id);
+                prev.addMessage(chatMessage);
+                chats.push(prev);
+            }
+        }
+    }
+
+    private static int findById(int chatId){
+        int i = 0;
+        for (Chat chat : chats) {
+            if (chat.getId() == chatId){
+                return i;
+            }
+            i++;
+        }
+
+        return -1;
     }
 }

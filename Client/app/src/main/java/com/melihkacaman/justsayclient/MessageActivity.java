@@ -73,6 +73,7 @@ public class MessageActivity extends AppCompatActivity {
         messageListAdapter = new MessageListAdapter(this, chat.getMessages());
         chatRecycler.setLayoutManager(new LinearLayoutManager(this));
         chatRecycler.setAdapter(messageListAdapter);
+        chatRecycler.smoothScrollToPosition(messageListAdapter.getItemCount() > 0 ? messageListAdapter.getItemCount() - 1 : 0);
     }
 
     public void btnSendClick(View view) {
@@ -86,18 +87,8 @@ public class MessageActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-        if(chatMessage.getSender().getId() == chat.getWho().getId()){
-            chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(chatMessage));
-        }else {
-            Chat chatPrev = ClientInfo.checkPreviousChat(chatMessage.getSender());
-            if (chatPrev == null){
-                Chat chat1 = new Chat(chatMessage.getSender());
-                chat1.addMessage(chatMessage);
-                ClientInfo.addChat(chat1);
-            }else {
-                chatPrev.addMessage(chatMessage);
-            }
-        }
+        messageListAdapter.notifyDataSetChanged();
+        chatRecycler.smoothScrollToPosition(messageListAdapter.getItemCount() - 1);
     }
 
     @Override

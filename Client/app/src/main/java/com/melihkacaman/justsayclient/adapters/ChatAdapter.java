@@ -50,35 +50,4 @@ public class ChatAdapter extends CustomRecyclerAdapter<Chat> {
     public Chat getItemById(int position){
         return this.datasource.elementAt(position);
     }
-
-    public void addNewChat(ChatMessage chatMessage){
-        Chat chat = new Chat(chatMessage.getSender());
-        chat.addMessage(chatMessage);
-        datasource.push(chat);
-        notifyDataSetChanged();
-    }
-
-    public void addNewChat(Chat chat, ChatMessage chatMessage){
-        int chatIdx = findById(chat.getId());
-        if(chatIdx != -1){
-            Chat chatPrev = datasource.get(chatIdx);
-            datasource.remove(chatIdx);
-
-            chatPrev.addMessage(chatMessage);
-            datasource.push(chatPrev);
-            notifyDataSetChanged();
-        }
-    }
-
-    private int findById(int id){
-        int i = 0;
-        for (Chat chat:datasource) {
-            if (chat.getId() == id){
-                return i;
-            }
-            i++;
-        }
-
-        return -1;
-    }
 }

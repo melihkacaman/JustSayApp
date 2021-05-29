@@ -17,6 +17,7 @@ import com.melihkacaman.justsayclient.adapters.CustomRecyclerAdapter;
 import com.melihkacaman.justsayclient.adapters.RoomAdapter;
 import com.melihkacaman.justsayclient.adapters.UserAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
+import com.melihkacaman.justsayclient.connection.ClientInfo;
 import com.melihkacaman.justsayclient.connection.RoomListener;
 import com.melihkacaman.justsayclient.model.Chat;
 
@@ -49,7 +50,13 @@ public class JoinRoomActivity extends AppCompatActivity{
         recyclerViewRooms.setLayoutManager(new LinearLayoutManager(JoinRoomActivity.this));
         adapter = new UserAdapter(JoinRoomActivity.this, rooms);
         adapter.setItemClickListener((view, position) -> {
-            adapter.getDataByPosition(position);
+            Room room = (Room) adapter.getDataByPosition(position);
+            if (room.contains(ClientInfo.me)){
+
+            }else {
+                //Todo: Do you want to join this room ?
+
+            }
         });
 
         recyclerViewRooms.setAdapter(adapter);

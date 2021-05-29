@@ -137,12 +137,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-        Chat chat = ClientInfo.checkPreviousChat(chatMessage.getSender());
-        if (chat == null){
-            adapter.addNewChat(chatMessage);
-        }else {
-            adapter.addNewChat(chat, chatMessage);
-        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
