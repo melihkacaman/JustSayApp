@@ -86,7 +86,18 @@ public class MessageActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-        chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(chatMessage));
+        if(chatMessage.getSender().getId() == chat.getWho().getId()){
+            chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(chatMessage));
+        }else {
+            Chat chatPrev = ClientInfo.checkPreviousChat(chatMessage.getSender());
+            if (chatPrev == null){
+                Chat chat1 = new Chat(chatMessage.getSender());
+                chat1.addMessage(chatMessage);
+                ClientInfo.addChat(chat1);
+            }else {
+                chatPrev.addMessage(chatMessage);
+            }
+        }
     }
 
     @Override

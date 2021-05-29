@@ -65,6 +65,8 @@ public class ChatAdapter extends CustomRecyclerAdapter<Chat> {
             datasource.remove(chatIdx);
 
             chatPrev.addMessage(chatMessage);
+            datasource.push(chatPrev);
+            notifyDataSetChanged();
         }
     }
 

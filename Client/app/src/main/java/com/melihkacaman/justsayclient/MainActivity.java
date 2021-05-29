@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         if(state.isConvenience()){
             Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
             intent.putExtra("username", txtUserName.getText().toString());
-            ClientInfo.generateFakeData();
+            //ClientInfo.generateFakeData();
             startActivity(intent);
         }else {
             Toast.makeText(getApplicationContext(),"Please, try different user name!",Toast.LENGTH_LONG).show();
