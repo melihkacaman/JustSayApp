@@ -19,6 +19,8 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Client {
+    private static Thread connection;
+
     private Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
@@ -31,6 +33,7 @@ public class Client {
     private ListenServer listenServer;
 
     private static Client client = null;
+
     private Client(String serverIP, int serverPort) throws IOException {
         this.serverIP = serverIP;
         this.serverPort = serverPort;
@@ -45,11 +48,11 @@ public class Client {
         this.listenersOfRoom = new LinkedList<>();
     }
 
-    public void sendObject(Object object){
+    public void sendObject(Object object) {
         new ForwardServer(object).start();
     }
 
-    public void sendRequestForUserList(){
+    public void sendRequestForUserList() {
         new ForwardServer(new Message<Void>(null, OperationType.SENDUSERNAMES)).start();
     }
 
@@ -58,11 +61,11 @@ public class Client {
         this.listenersOfRoom.add(listener);
     }
 
-    public void sendRequestForRoomList(){
+    public void sendRequestForRoomList() {
         new ForwardServer(new Message<User>(ClientInfo.me, OperationType.SENDROOMSLIST)).start();
     }
 
-    public void sendChatMessage(ChatMessage chatMessage){
+    public void sendChatMessage(ChatMessage chatMessage) {
         new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
     }
 
@@ -73,14 +76,12 @@ public class Client {
         Thread thread = new Thread(() -> {
             Object ack = null;
             try {
-                System.out.println("BURDAAAAA");
                 ack = input.readObject();
-                if (ack instanceof User)
-                {
+                if (ack instanceof User) {
                     ClientInfo.me = (User) ack;
                     EventBus.getDefault().post(new ConvenienceUser(true, ClientInfo.me));
                     listenServer.start();
-                }else {
+                } else {
                     EventBus.getDefault().post(new ConvenienceUser(false, null));
                     throw new Exception("Client NACK!");
                 }
@@ -93,24 +94,28 @@ public class Client {
         thread.start();
     }
 
-    public void addUserListener(UserListener listener){
+    public void addUserListener(UserListener listener) {
         this.listenersOfUser.add(listener);
     }
 
     public static Client getInstance() {
-        if (client == null)
-        {
-            new Thread(() -> {
-
-                do {
-                    try {
-                        client = new Client("192.168.1.246", 5000);
-                        Thread.sleep(1000);
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
+        if (client == null) {
+            if (connection == null) {
+                connection = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        do {
+                            try {
+                                client = new Client("192.168.1.246", 5000);
+                                Thread.sleep(1000);
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        } while (client == null);
                     }
-                } while (client == null);
-            }).start();
+                });
+                connection.start();
+            }
         }
 
         return client;
@@ -118,6 +123,7 @@ public class Client {
 
     private class ForwardServer extends Thread {
         Object message;
+
         ForwardServer(Object message) {
             this.message = message;
         }
@@ -135,11 +141,11 @@ public class Client {
     private class ListenServer extends Thread {
         @Override
         public void run() {
-            while (!socket.isClosed()){
+            while (!socket.isClosed()) {
                 try {
                     Object message = input.readObject();
-                    if (message instanceof Message){
-                        switch (((Message) message).operationType){
+                    if (message instanceof Message) {
+                        switch (((Message) message).operationType) {
                             case SENDUSERNAMES:
                                 User[] result = (User[]) ((Message) message).targetObj;
                                 EventBus.getDefault().post(result);
@@ -147,7 +153,7 @@ public class Client {
                             case CREATEROOM:
                                 Room room = (Room) ((Message) message).targetObj;
                                 RoomListener roomListener = listenersOfRoom.poll();
-                                if(roomListener != null){
+                                if (roomListener != null) {
                                     roomListener.getRoomInfo(room);
                                 }
                                 break;

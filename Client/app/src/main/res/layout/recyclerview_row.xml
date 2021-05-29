@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Melih Kacaman"
             android:layout_weight="1"
+            android:textColor="@color/purple_500"
             android:textSize="20sp"/>
 
         <TextView
@@ -31,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/purple_200"
             android:text="Description"
 
             android:textSize="15sp"/>

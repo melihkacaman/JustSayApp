@@ -91,6 +91,7 @@ public class SClient implements Runnable, OpClient {
     public boolean sendMessage(ChatMessage message) {
         try {
             cOutput.writeObject(new Message<ChatMessage>(message, OperationType.SENDCHATMESSAGE));
+            System.out.println("Message sent to client");
             return true;
         } catch (IOException e) {
             e.printStackTrace();

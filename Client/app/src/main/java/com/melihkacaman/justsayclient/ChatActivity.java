@@ -19,6 +19,7 @@ import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.adapters.ChatAdapter;
 import com.melihkacaman.justsayclient.adapters.UserAdapter;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
+import com.melihkacaman.justsayclient.model.Chat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,7 +34,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView recyclerChats;
     private ChatAdapter adapter;
-
 
     private boolean isAllFabsVisible;
 
@@ -110,13 +110,13 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(getApplicationContext(), ClientInfo.getChats());
         recyclerChats.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
         adapter.setItemClickListener((view, position) -> {
+            Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+            intent.putExtra("selectedUser", adapter.getItemById(position).getWho());
             if (adapter.getItemById(position).getWho() instanceof Room){
-
             }else {
-                Intent intent= new Intent(getApplicationContext(), MessageActivity.class);
-                intent.putExtra("selectedUser", adapter.getItemById(position).getWho());
-                startActivity(intent);
+                // TODO: 27.05.2021 if this user leave the server, what happen ?
             }
+            startActivity(intent);
         });
         recyclerChats.setAdapter(adapter);
     }
@@ -137,20 +137,23 @@ public class ChatActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ChatMessage chatMessage){
-
+        Chat chat = ClientInfo.checkPreviousChat(chatMessage.getSender());
+        if (chat == null){
+            adapter.addNewChat(chatMessage);
+        }else {
+            adapter.addNewChat(chat, chatMessage);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        System.out.println("CHAT ACTIVITY START ÇALIŞTI");
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        System.out.println("CHAT ACTIVITY STOP ÇALISTI");
         EventBus.getDefault().unregister(this);
     }
 }

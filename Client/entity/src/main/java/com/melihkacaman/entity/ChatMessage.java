@@ -1,13 +1,16 @@
 package com.melihkacaman.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ChatMessage extends  BaseEntity {
+public class ChatMessage implements Serializable {
     private int id;
     private User sender;
     private User receiver;
     private long createdAt;
     private String Message;
+
+    static final long serialVersionUID = 42L;
 
     public ChatMessage(User sender, User receiver , String message) {
         this.id = getID();
@@ -35,5 +38,11 @@ public class ChatMessage extends  BaseEntity {
 
     public String getMessage() {
         return Message;
+    }
+
+
+    private static int idCounter = 10;
+    private static synchronized int getID(){
+        return idCounter++;
     }
 }

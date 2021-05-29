@@ -27,7 +27,7 @@ public class ServerManager implements OpServer {
 
     public boolean sendChatMessageUserToUser(ChatMessage message){
         for (SClient sClient : users) {
-            if(message.getReceiver().getId() == sClient.getId()){
+            if(message.getReceiver().getId() == sClient.getUser().getId()){
               return sClient.sendMessage(message);
             }
         }

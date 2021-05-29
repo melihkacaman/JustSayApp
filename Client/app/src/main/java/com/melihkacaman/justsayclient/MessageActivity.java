@@ -52,6 +52,7 @@ public class MessageActivity extends AppCompatActivity {
         Chat prev = ClientInfo.checkPreviousChat(selectedUser);
         if (prev != null){// TODO: 22.05.2021 user can leave ?
             chat = prev;
+            // TODO: 27.05.2021 if there is prev messages, focus last message.  
         }else {
             chat = new Chat(selectedUser);
             ClientInfo.addChat(chat);
