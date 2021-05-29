@@ -21,7 +21,7 @@ public class User implements Serializable {
         return id;
     }
 
-
+    private static final long serialVersionUID = 42L;
 
     private static int idCounter = 500;
     private static synchronized int getID(){

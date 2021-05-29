@@ -10,7 +10,7 @@ public class ChatMessage implements Serializable {
     private long createdAt;
     private String Message;
 
-    static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 42L;
 
     public ChatMessage(User sender, User receiver , String message) {
         this.id = getID();

@@ -22,8 +22,10 @@ public class Room extends User {
         this.users = new LinkedList<>();
         this.creationTime = new Date(System.currentTimeMillis());
         this.lastUpdatedTime = new Date(System.currentTimeMillis());
-    }
 
+        this.users.add(owner);
+    }
+    private static final long serialVersionUID = 42L;
     public String getTopic() {
         return topic;
     }
@@ -45,7 +47,6 @@ public class Room extends User {
     }
 
     public void addUser(User user){
-        users.add(user);
     }
 
     public boolean contains (User user){
