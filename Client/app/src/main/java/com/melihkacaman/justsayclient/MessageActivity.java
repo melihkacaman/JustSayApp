@@ -130,7 +130,14 @@ public class MessageActivity extends AppCompatActivity {
                 } else {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageData);
                 }
-                System.out.println("FOTO ALINDI : " + bitmap.getWidth());
+                // TODO: 30.05.2021 /*
+                //  1. should be shown on recycler first
+                //  2. send server
+                //  3. send target client
+                //  4. show image target's client screen
+                //  */
+
+
             } catch (IOException e) {
                 System.out.println("ERROR : " + e.getMessage());
                 e.printStackTrace();
