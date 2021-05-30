@@ -138,14 +138,14 @@ public class MessageActivity extends AppCompatActivity {
                 //  3. send target client
                 //  4. show image target's client screen
                 //  */
-
+                Bitmap resizedImg = getResizedBitmap(bitmap, 50);
                 ByteArrayOutputStream blob = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
+                resizedImg.compress(Bitmap.CompressFormat.PNG, 0, blob);
                 byte[] bitMapData = blob.toByteArray();
 
                 FileMessage fileMessage = new FileMessage(ClientInfo.me, chat.getWho(), bitMapData, FileMessage.FileType.IMAGE);
                 chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(fileMessage));
-                client.sendChatMessage(fileMessage);
+                client.sendFileMessage(fileMessage);
 
             } catch (IOException e) {
                 System.out.println("ERROR : " + e.getMessage());
@@ -172,5 +172,20 @@ public class MessageActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }

@@ -1,11 +1,13 @@
 package com.melihkacaman.justsayclient.connection;
 
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.FileMessage;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.model.ConvenienceUser;
+import com.melihkacaman.justsayclient.model.ImgMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,6 +37,7 @@ public class Client {
 
     private Queue<UserListener> listenersOfUser;
     private Queue<RoomListener> listenersOfRoom;
+    private Queue<ImgMessage> images;
     private ListenServer listenServer;
 
     private static Client client = null;
@@ -51,6 +54,7 @@ public class Client {
 
         this.listenersOfUser = new LinkedList<>();
         this.listenersOfRoom = new LinkedList<>();
+        this.images = new LinkedList<>();
     }
 
     public void sendObject(Object object) {
@@ -75,10 +79,19 @@ public class Client {
     }
 
     public void sendChatMessage(ChatMessage chatMessage) {
-        if (chatMessage.getReceiver() instanceof Room){
+        if (chatMessage.getReceiver() instanceof Room) {
             new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDROOMMESSAGE)).start();
-        }else {
+        } else {
             new ForwardServer(new Message<ChatMessage>(chatMessage, OperationType.SENDCHATMESSAGE)).start();
+        }
+    }
+
+    public void sendFileMessage(FileMessage fileMessage) {
+        if (fileMessage.getFileType() == FileMessage.FileType.IMAGE) {
+            ImgMessage imgMessage = new ImgMessage((byte[]) fileMessage.getFile(),
+                    new FileMessage(fileMessage.getSender(), fileMessage.getReceiver(), null, FileMessage.FileType.IMAGE));
+            new ForwardServer(new Message<Void>(null, OperationType.SENDIMAGE)).start();
+            images.add(imgMessage);
         }
     }
 
@@ -185,6 +198,21 @@ public class Client {
                             case JOINROOM:
                                 Room joinedRoom = (Room) ((Message) message).targetObj;
                                 EventBus.getDefault().post(joinedRoom);
+                                break;
+                            case SENDIMAGE:
+                                ImgMessage imgMessage = images.poll();
+                                byte[] img = imgMessage.getImg();
+                                if (img != null && img.length > 0) {
+                                    DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+                                    dOut.writeInt(img.length); // write length of the message
+                                    dOut.write(img);
+                                    Object ob = input.readObject();
+                                    if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO){
+                                        ChatMessage chatMessage1 = new ChatMessage(imgMessage.getFileMessage().getSender(),
+                                                imgMessage.getFileMessage().getReceiver(), "IMAGE");
+                                        sendObject(new Message<ChatMessage>(chatMessage1, OperationType.IMAGEINFO));
+                                    }
+                                }
                                 break;
                         }
                     }

@@ -3,6 +3,7 @@ package com.melihkacaman.serverapp.server;
 
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.FileMessage;
 import com.melihkacaman.entity.Message;
 import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
@@ -40,17 +41,17 @@ public class SClient implements Runnable, OpClient {
 
     @Override
     public void run() {
-        while (!socket.isClosed()){
+        while (!socket.isClosed()) {
             try {
                 Object message = cInput.readObject();
-                if (message instanceof Message){
-                    switch (((Message) message).operationType){
+                if (message instanceof Message) {
+                    switch (((Message) message).operationType) {
                         case CHECKUSERNAME:
-                            if (serverManager.checkUserNameForConvenience(((Message) message).targetObj.toString())){
+                            if (serverManager.checkUserNameForConvenience(((Message) message).targetObj.toString())) {
                                 String userName = ((Message) message).targetObj.toString();
                                 user = new User(userName);
                                 cOutput.writeObject(user);
-                            }else {
+                            } else {
                                 ACK(ACKType.FAILURE);
                             }
                             break;
@@ -75,7 +76,7 @@ public class SClient implements Runnable, OpClient {
                         case SENDCHATMESSAGE:
                             ChatMessage chatMessage = (ChatMessage) ((Message) message).targetObj;
                             boolean ack = serverManager.sendChatMessageUserToUser(chatMessage);
-                            if (!ack){
+                            if (!ack) {
                                 // TODO: 22.05.2021 migth send ack, repeat the message again.
                             }
                             break;
@@ -83,9 +84,9 @@ public class SClient implements Runnable, OpClient {
                             Room targetRoom = (Room) ((Message) message).targetObj;
                             targetRoom = serverManager.addUserToRoom(targetRoom, user);
 
-                            if (targetRoom != null){
+                            if (targetRoom != null) {
                                 cOutput.writeObject(new Message<Room>(targetRoom, OperationType.JOINROOM));
-                            }else {
+                            } else {
                                 // nack
                                 cOutput.writeObject(new Message<Room>(null, OperationType.JOINROOM));
                             }
@@ -93,6 +94,22 @@ public class SClient implements Runnable, OpClient {
                         case SENDROOMMESSAGE:
                             ChatMessage roomMessage = (ChatMessage) ((Message) message).targetObj;
                             serverManager.sendRoomMessage(roomMessage);
+                            break;
+                        case SENDIMAGE:
+                            cOutput.writeObject(new Message<Void>(null, OperationType.SENDIMAGE));
+                            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+                            int length = dIn.readInt();                    // read length of incoming message
+                            if(length>0) {
+                                byte[] img = new byte[length];
+                                dIn.readFully(img, 0, img.length); // read the message
+                                cOutput.writeObject(new Message<Void>(null, OperationType.IMAGEINFO));
+                                Object ob = cInput.readObject();
+                                if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO){
+                                    ChatMessage fileMessage = (ChatMessage) ((Message) ob).targetObj;
+                                    System.out.println("sende name " + fileMessage.getSender().getUserName());
+                                    System.out.println("receiver name " + fileMessage.getReceiver().getUserName());
+                                }
+                            }
                             break;
                     }
                 }

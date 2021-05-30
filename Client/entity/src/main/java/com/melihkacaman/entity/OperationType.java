@@ -8,6 +8,6 @@ public enum OperationType {
     SENDCHATMESSAGE,
     JOINROOM,
     SENDROOMMESSAGE,
-
-
+    SENDIMAGE,
+    IMAGEINFO
 }
