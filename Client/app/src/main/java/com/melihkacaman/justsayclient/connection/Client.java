@@ -9,6 +9,8 @@ import com.melihkacaman.justsayclient.model.ConvenienceUser;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,6 +26,9 @@ public class Client {
     private Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+
+    private DataOutputStream dataOutputStream;
+    private DataInputStream dataInputStream;
 
     private String serverIP;
     private int serverPort;
@@ -141,6 +146,7 @@ public class Client {
         public void run() {
             try {
                 output.writeObject(message);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
