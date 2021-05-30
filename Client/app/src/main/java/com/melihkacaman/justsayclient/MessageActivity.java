@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.FileMessage;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.justsayclient.adapters.MessageListAdapter;
 import com.melihkacaman.justsayclient.connection.Client;
@@ -34,6 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,12 +133,19 @@ public class MessageActivity extends AppCompatActivity {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageData);
                 }
                 // TODO: 30.05.2021 /*
-                //  1. should be shown on recycler first
+                //  1. should be shown on recycler first. X
                 //  2. send server
                 //  3. send target client
                 //  4. show image target's client screen
                 //  */
 
+                ByteArrayOutputStream blob = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
+                byte[] bitMapData = blob.toByteArray();
+
+                FileMessage fileMessage = new FileMessage(ClientInfo.me, chat.getWho(), bitMapData, FileMessage.FileType.IMAGE);
+                chatRecycler.smoothScrollToPosition(messageListAdapter.insertItem(fileMessage));
+                client.sendChatMessage(fileMessage);
 
             } catch (IOException e) {
                 System.out.println("ERROR : " + e.getMessage());

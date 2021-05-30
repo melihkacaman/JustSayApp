@@ -1,6 +1,8 @@
 package com.melihkacaman.justsayclient.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.FileMessage;
 import com.melihkacaman.justsayclient.R;
 import com.melihkacaman.justsayclient.connection.ClientInfo;
 
@@ -24,6 +27,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int VIEW_TYPE_MESSAGE_IMAGE = 3;
 
     public MessageListAdapter(Context context, List<ChatMessage> messageList) {
         mContext = context;
@@ -33,12 +37,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         ChatMessage message = (ChatMessage) mMessageList.get(position);
-        if (message.getSender().getId() == ClientInfo.me.getId()){
-            // It's me!
-            return VIEW_TYPE_MESSAGE_SENT;
+        if (message instanceof FileMessage){
+            return VIEW_TYPE_MESSAGE_IMAGE;
         }else {
-            // It's not me! It's my partner.
-            return VIEW_TYPE_MESSAGE_RECEIVED;
+            if (message.getSender().getId() == ClientInfo.me.getId()){
+                // It's me!
+                return VIEW_TYPE_MESSAGE_SENT;
+            }else {
+                // It's not me! It's my partner.
+                return VIEW_TYPE_MESSAGE_RECEIVED;
+            }
         }
     }
 
@@ -52,6 +60,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }else if(viewType == VIEW_TYPE_MESSAGE_RECEIVED){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_other, parent, false);
             return new ReceivedMessageHolder(view);
+        }else if (viewType == VIEW_TYPE_MESSAGE_IMAGE){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_image, parent, false);
+            return new ImageMessageHolder(view);
         }else {
             return null;
         }
@@ -66,6 +77,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder)holder).bind(message);
+                break;
+            case VIEW_TYPE_MESSAGE_IMAGE:
+                ((ImageMessageHolder)holder).bind((FileMessage) message);
                 break;
         }
     }
@@ -121,6 +135,31 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(mContext,message.getCreatedAt(), DateUtils.FORMAT_SHOW_TIME));
+        }
+    }
+
+    private class ImageMessageHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView txt_me, txt_other;
+
+        ImageMessageHolder(View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.img_message);
+            txt_me = itemView.findViewById(R.id.tv_image_me);
+            txt_other = itemView.findViewById(R.id.tv_image_other);
+        }
+
+        void bind(FileMessage fileMessage){
+            Object img = fileMessage.getFile();
+            byte[] img_array = (byte[])img;
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img_array, 0, img_array.length);
+
+            image.setImageBitmap(bitmap);
+            txt_me.setText("");
+            txt_other.setText("");
+            if (ClientInfo.me.getId() != fileMessage.getSender().getId()){
+                txt_other.setText(fileMessage.getSender().getUserName());
+            }
         }
     }
 }
