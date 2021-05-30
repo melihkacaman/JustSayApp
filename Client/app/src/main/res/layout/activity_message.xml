@@ -64,10 +64,11 @@
         android:background="#e0e0e0"
         app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layout_gchat_chatbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -83,6 +84,7 @@
             android:hint="Enter Message"
             android:inputType="text"
             android:maxLines="6"
+            android:layout_weight="1"
             tools:ignore="Autofill" />
 
         <Button
@@ -95,8 +97,19 @@
             android:elevation="20dp"
             android:textColor="@color/purple_700"
             android:onClick="btnSendClick"/>
+        <Button
+            android:id="@+id/button_gchat_send_photo"
+            android:layout_width="40dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackground"
+            android:text="F"
+            android:elevation="20dp"
+            android:backgroundTint="@color/purple_700"
+            android:textColor="@color/purple_700"
+            android:onClick="btnFileSend" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
