@@ -47,6 +47,9 @@ public class Room extends User {
     }
 
     public void addUser(User user){
+        if(!contains(user)){
+            users.add(user);
+        }
     }
 
     public boolean contains (User user){

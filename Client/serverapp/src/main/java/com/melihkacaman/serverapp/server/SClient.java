@@ -81,6 +81,7 @@ public class SClient implements Runnable, OpClient {
                         case JOINROOM:
                             Room targetRoom = (Room) ((Message) message).targetObj;
                             targetRoom = serverManager.addUserToRoom(targetRoom, user);
+
                             if (targetRoom != null){
                                 cOutput.writeObject(new Message<Room>(targetRoom, OperationType.JOINROOM));
                             }else {

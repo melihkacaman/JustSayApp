@@ -41,7 +41,7 @@ public class ClientInfo {
 
     private static Chat getRoomChatById(int id) {
         for (Chat chat : chats) {
-            if (chat.getWho() instanceof Room && chat.getId() == id)
+            if (chat.getWho() instanceof Room && chat.getWho().getId() == id)
                 return chat;
         }
 
