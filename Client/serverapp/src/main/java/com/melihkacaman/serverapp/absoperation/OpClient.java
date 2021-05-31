@@ -7,5 +7,5 @@ public interface OpClient {
     boolean sendMessage(ChatMessage message);
     void sendMessage(String message);
     void ACK(ACKType ackType);
-
+    void sendMessage(Object object);
 }

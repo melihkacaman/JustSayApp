@@ -9,6 +9,7 @@ import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpClient;
 import com.melihkacaman.serverapp.businnes.ServerManager;
+import com.melihkacaman.serverapp.model.ImgMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,7 +17,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class SClient implements Runnable, OpClient {
     private int id;
@@ -24,6 +27,8 @@ public class SClient implements Runnable, OpClient {
     private ObjectOutputStream cOutput;
     private ObjectInputStream cInput;
     private User user = null;
+
+    private Queue<ImgMessage> imagesMessage;
 
     private ServerManager serverManager;
 
@@ -37,6 +42,12 @@ public class SClient implements Runnable, OpClient {
         System.out.println("[SClient.java] A Client is connected.");
 
         serverManager = ServerManager.getInstance();
+
+        this.imagesMessage = new LinkedList<>();
+    }
+
+    public void addImage(ImgMessage message){
+        imagesMessage.add(message);
     }
 
     @Override
@@ -108,26 +119,25 @@ public class SClient implements Runnable, OpClient {
                                     ChatMessage fileMessage = (ChatMessage) ((Message) ob).targetObj;
                                     if (fileMessage.getReceiver() instanceof Room) {
                                         // This is a room.
-
+                                        int roomId = fileMessage.getReceiver().getId();
+                                        serverManager.sendFileToRoom(roomId, new ImgMessage(fileMessage, img));
                                     } else {
                                         // This is a user.
                                         SClient receiver = serverManager.findUserById(fileMessage.getReceiver().getId());
-                                        if (receiver != null) {
-                                            receiver.cOutput.writeObject(new Message<Void>(null, OperationType.RECEIVEIMAGE));
-                                            Object o = receiver.cInput.readObject();
-                                            if (o instanceof Message && ((Message) o).operationType == OperationType.RECEIVEIMAGE) {
-                                                DataOutputStream dOut = new DataOutputStream(receiver.socket.getOutputStream());
-                                                dOut.writeInt(img.length); // write length of the message
-                                                dOut.write(img);
-
-                                                Object o2 = receiver.cInput.readObject();
-                                                if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO) {
-                                                    receiver.cOutput.writeObject(new Message<ChatMessage>(fileMessage, OperationType.IMAGEINFO));
-                                                }
-                                            }
-                                        }
+                                        serverManager.sendFile(receiver,new ImgMessage(fileMessage, img));
                                     }
                                 }
+                            }
+                            break;
+                        case RECEIVEIMAGE:
+                            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+                            ImgMessage imgMessage = imagesMessage.poll();
+                            dOut.writeInt(imgMessage.img.length); // write length of the message
+                            dOut.write(imgMessage.img);
+
+                            Object o2 = cInput.readObject();
+                            if (o2 instanceof Message && ((Message) o2).operationType == OperationType.IMAGEINFO) {
+                                cOutput.writeObject(new Message<ChatMessage>(imgMessage.chatMessage, OperationType.IMAGEINFO));
                             }
                             break;
                     }
@@ -159,6 +169,15 @@ public class SClient implements Runnable, OpClient {
     public void ACK(ACKType ackType) {
         try {
             cOutput.writeObject(ackType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendMessage(Object object) {
+        try {
+            cOutput.writeObject(object);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,9 +2,12 @@ package com.melihkacaman.serverapp.businnes;
 
 
 import com.melihkacaman.entity.ChatMessage;
+import com.melihkacaman.entity.Message;
+import com.melihkacaman.entity.OperationType;
 import com.melihkacaman.entity.Room;
 import com.melihkacaman.entity.User;
 import com.melihkacaman.serverapp.absoperation.OpServer;
+import com.melihkacaman.serverapp.model.ImgMessage;
 import com.melihkacaman.serverapp.server.SClient;
 
 import java.util.LinkedList;
@@ -52,6 +55,23 @@ public class ServerManager implements OpServer {
         }
 
         return null;
+    }
+
+    @Override
+    public void sendFile(SClient receiver, ImgMessage message) {
+        receiver.addImage(message);
+        receiver.sendMessage(new Message<Void>(null, OperationType.RECEIVEIMAGE));
+    }
+
+    @Override
+    public void sendFileToRoom(int roomId, ImgMessage message) {
+        Room targetRoom = findRoomById(roomId);
+        for(User item : targetRoom.getUsers()){
+            if (item.getId() != message.chatMessage.getSender().getId()){
+                findUserById(item.getId()).addImage(message);
+                findUserById(item.getId()).sendMessage(new Message<Void>(null, OperationType.RECEIVEIMAGE));
+            }
+        }
     }
 
     public int getUserCount() {
@@ -156,4 +176,6 @@ public class ServerManager implements OpServer {
             }
         }
     }
+
+
 }

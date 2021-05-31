@@ -67,6 +67,7 @@ public class JoinRoomActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         (dialog, which) -> {
                             client.sendRequestForJoiningRoom(room);
+                            room.addUser(ClientInfo.me);
                             dialog.dismiss();
                         });
                 alertDialog.show();

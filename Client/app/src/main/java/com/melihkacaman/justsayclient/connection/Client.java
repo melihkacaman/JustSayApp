@@ -224,13 +224,12 @@ public class Client {
                                 if(length>0) {
                                     byte[] imgReceive = new byte[length];
                                     dIn.readFully(imgReceive, 0, imgReceive.length); // read the message
-                                    Bitmap IMGbitmap = BitmapFactory.decodeByteArray(imgReceive, 0, imgReceive.length);
-                                    //output.writeObject(new Message<Void>(null, OperationType.IMAGEINFO));
+                                    output.writeObject(new Message<Void>(null, OperationType.IMAGEINFO));
                                     Object ob = input.readObject();
                                     if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO){
                                         ChatMessage fileMessage = (ChatMessage) ((Message) ob).targetObj;
                                         FileMessage receivedFile = new FileMessage(fileMessage.getSender(),fileMessage.getReceiver()
-                                                , IMGbitmap, FileMessage.FileType.IMAGE);
+                                                , imgReceive, FileMessage.FileType.IMAGE);
                                         ClientInfo.insertMessage(receivedFile);
                                         EventBus.getDefault().post(fileMessage);
                                     }
