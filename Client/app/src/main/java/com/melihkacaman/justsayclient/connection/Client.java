@@ -1,5 +1,8 @@
 package com.melihkacaman.justsayclient.connection;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.FileMessage;
 import com.melihkacaman.entity.Message;
@@ -211,6 +214,25 @@ public class Client {
                                         ChatMessage chatMessage1 = new ChatMessage(imgMessage.getFileMessage().getSender(),
                                                 imgMessage.getFileMessage().getReceiver(), "IMAGE");
                                         sendObject(new Message<ChatMessage>(chatMessage1, OperationType.IMAGEINFO));
+                                    }
+                                }
+                                break;
+                            case RECEIVEIMAGE:
+                                output.writeObject(new Message<Void>(null, OperationType.RECEIVEIMAGE));
+                                DataInputStream dIn = new DataInputStream(socket.getInputStream());
+                                int length = dIn.readInt();                    // read length of incoming message
+                                if(length>0) {
+                                    byte[] imgReceive = new byte[length];
+                                    dIn.readFully(imgReceive, 0, imgReceive.length); // read the message
+                                    Bitmap IMGbitmap = BitmapFactory.decodeByteArray(imgReceive, 0, imgReceive.length);
+                                    //output.writeObject(new Message<Void>(null, OperationType.IMAGEINFO));
+                                    Object ob = input.readObject();
+                                    if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO){
+                                        ChatMessage fileMessage = (ChatMessage) ((Message) ob).targetObj;
+                                        FileMessage receivedFile = new FileMessage(fileMessage.getSender(),fileMessage.getReceiver()
+                                                , IMGbitmap, FileMessage.FileType.IMAGE);
+                                        ClientInfo.insertMessage(receivedFile);
+                                        EventBus.getDefault().post(fileMessage);
                                     }
                                 }
                                 break;

@@ -1,6 +1,5 @@
 package com.melihkacaman.serverapp.server;
 
-
 import com.melihkacaman.entity.ACKType;
 import com.melihkacaman.entity.ChatMessage;
 import com.melihkacaman.entity.FileMessage;
@@ -12,6 +11,7 @@ import com.melihkacaman.serverapp.absoperation.OpClient;
 import com.melihkacaman.serverapp.businnes.ServerManager;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -99,15 +99,34 @@ public class SClient implements Runnable, OpClient {
                             cOutput.writeObject(new Message<Void>(null, OperationType.SENDIMAGE));
                             DataInputStream dIn = new DataInputStream(socket.getInputStream());
                             int length = dIn.readInt();                    // read length of incoming message
-                            if(length>0) {
+                            if (length > 0) {
                                 byte[] img = new byte[length];
                                 dIn.readFully(img, 0, img.length); // read the message
                                 cOutput.writeObject(new Message<Void>(null, OperationType.IMAGEINFO));
                                 Object ob = cInput.readObject();
-                                if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO){
+                                if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO) {
                                     ChatMessage fileMessage = (ChatMessage) ((Message) ob).targetObj;
-                                    System.out.println("sende name " + fileMessage.getSender().getUserName());
-                                    System.out.println("receiver name " + fileMessage.getReceiver().getUserName());
+                                    if (fileMessage.getReceiver() instanceof Room) {
+                                        // This is a room.
+
+                                    } else {
+                                        // This is a user.
+                                        SClient receiver = serverManager.findUserById(fileMessage.getReceiver().getId());
+                                        if (receiver != null) {
+                                            receiver.cOutput.writeObject(new Message<Void>(null, OperationType.RECEIVEIMAGE));
+                                            Object o = receiver.cInput.readObject();
+                                            if (o instanceof Message && ((Message) o).operationType == OperationType.RECEIVEIMAGE) {
+                                                DataOutputStream dOut = new DataOutputStream(receiver.socket.getOutputStream());
+                                                dOut.writeInt(img.length); // write length of the message
+                                                dOut.write(img);
+
+                                                Object o2 = receiver.cInput.readObject();
+                                                if (ob instanceof Message && ((Message) ob).operationType == OperationType.IMAGEINFO) {
+                                                    receiver.cOutput.writeObject(new Message<ChatMessage>(fileMessage, OperationType.IMAGEINFO));
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             break;

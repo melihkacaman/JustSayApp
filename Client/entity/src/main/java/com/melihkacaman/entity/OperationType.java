@@ -9,5 +9,6 @@ public enum OperationType {
     JOINROOM,
     SENDROOMMESSAGE,
     SENDIMAGE,
-    IMAGEINFO
+    IMAGEINFO,
+    RECEIVEIMAGE
 }

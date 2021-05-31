@@ -132,12 +132,7 @@ public class MessageActivity extends AppCompatActivity {
                 } else {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageData);
                 }
-                // TODO: 30.05.2021 /*
-                //  1. should be shown on recycler first. X
-                //  2. send server
-                //  3. send target client
-                //  4. show image target's client screen
-                //  */
+
                 Bitmap resizedImg = getResizedBitmap(bitmap, 50);
                 ByteArrayOutputStream blob = new ByteArrayOutputStream();
                 resizedImg.compress(Bitmap.CompressFormat.PNG, 0, blob);

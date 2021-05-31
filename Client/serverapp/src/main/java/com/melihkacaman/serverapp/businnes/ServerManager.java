@@ -90,7 +90,7 @@ public class ServerManager implements OpServer {
         return user;
     }
 
-    private SClient findUserById(int id) {
+    public SClient findUserById(int id) {
         SClient user = null;
 
         for (SClient sClient : users) {
